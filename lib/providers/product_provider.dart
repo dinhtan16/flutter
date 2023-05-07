@@ -17,14 +17,12 @@ class ProductProvider with ChangeNotifier {
       productPrice: element.data().toString().contains('productPrice')
           ? element.get('productPrice')
           : '',
-      productId: element.data().toString().contains('productPrice')
-          ? element.get('productPrice')
-          : '',
+      productId: element.id,
       productDes: element.data().toString().contains('productDes')
           ? element.get('productDes')
           : '',
     );
-
+    print(productModel);
     search.add(productModel!);
   }
 

@@ -8,7 +8,7 @@ class ReviewCartProvider with ChangeNotifier {
     String? cartId,
     String? cartName,
     String? cartImage,
-    int? cartPrice,
+    String? cartPrice,
     int? cartQuantity,
     var cartUnit,
   }) async {
@@ -34,7 +34,7 @@ class ReviewCartProvider with ChangeNotifier {
     String? cartId,
     String? cartName,
     String? cartImage,
-    int? cartPrice,
+    String? cartPrice,
     int? cartQuantity,
   }) async {
     FirebaseFirestore.instance
