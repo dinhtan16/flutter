@@ -65,11 +65,21 @@ class ReviewCartProvider with ChangeNotifier {
         .get();
     reviewCartValue.docs.forEach((element) {
       ReviewCartModel reviewCartModel = ReviewCartModel(
-        cartId: element.get("cartId"),
-        cartImage: element.get("cartImage"),
-        cartName: element.get("cartName"),
-        cartPrice: element.get("cartPrice"),
-        cartQuantity: element.get("cartQuantity"),
+        cartId: element.data().toString().contains('cartId')
+            ? element.get('cartId')
+            : '',
+        cartImage: element.data().toString().contains('cartImage')
+            ? element.get('cartImage')
+            : '',
+        cartName: element.data().toString().contains('cartName')
+            ? element.get('cartName')
+            : '',
+        cartPrice: element.data().toString().contains('cartPrice')
+            ? element.get('cartPrice')
+            : '',
+        cartQuantity: element.data().toString().contains('cartQuantity')
+            ? element.get('cartQuantity')
+            : '',
         cartUnit: element.get("cartUnit"),
       );
       newList.add(reviewCartModel);
@@ -85,9 +95,9 @@ class ReviewCartProvider with ChangeNotifier {
 //// TotalPrice  ///
 
   getTotalPrice() {
-    double total = 0.0;
+    double total = 0;
     reviewCartDataList.forEach((element) {
-      total += element.cartPrice! * element.cartQuantity!;
+      total += int.parse(element.cartPrice!) * element.cartQuantity!;
     });
     return total;
   }

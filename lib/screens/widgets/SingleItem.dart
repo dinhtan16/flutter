@@ -1,20 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:currency_formatter/currency_formatter.dart';
+import 'package:foodorder_app/providers/review_cart_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class SingleItem extends StatelessWidget {
+class SingleItem extends StatefulWidget {
+  bool? isBool = false;
+  String? productImage;
+  String? productName;
+  bool? wishList = false;
   bool? isCart = false;
 
-  final String? productName;
-  final String? productImage;
-  final String? productId;
-  final String? productPrice;
-
+  String? productPrice;
+  String? productId;
+  int? productQuantity;
+  Function? onDelete;
+  var productUnit;
   SingleItem(
       {this.isCart,
+      this.productQuantity,
       this.productId,
+      this.productUnit,
+      this.onDelete,
+      this.isBool,
       this.productImage,
       this.productName,
-      this.productPrice});
+      this.productPrice,
+      this.wishList});
+
+  @override
+  _SingleItemState createState() => _SingleItemState();
+}
+
+class _SingleItemState extends State<SingleItem> {
+  ReviewCartProvider? reviewCartProvider;
+
+  int? count;
+  getCount() {
+    setState(() {
+      count = widget.productQuantity!;
+    });
+  }
 
   CurrencyFormatterSettings currencySettings = CurrencyFormatterSettings(
     symbol: 'đ',
@@ -26,9 +52,12 @@ class SingleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getCount();
+    reviewCartProvider = Provider.of<ReviewCartProvider>(context);
+    reviewCartProvider?.getReviewCartData();
     var priceNumber = 0;
     try {
-      int nums = int.parse(productPrice!);
+      int nums = int.parse(widget.productPrice!);
       priceNumber = nums;
     } catch (e) {
       print('Chuỗi không thể chuyển đổi thành số: $e');
@@ -42,23 +71,21 @@ class SingleItem extends StatelessWidget {
           child: Container(
             height: 100,
             child: Center(
-              child: Image.network(productImage!),
+              child: Image.network(widget.productImage!),
             ),
           ),
         ),
         Expanded(
           child: Container(
             child: Column(
-              mainAxisAlignment: isCart == false
-                  ? MainAxisAlignment.spaceAround
-                  : MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      productName ?? '',
+                      widget.productName ?? '',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                     ),
@@ -73,62 +100,84 @@ class SingleItem extends StatelessWidget {
                     SizedBox(height: 10),
                   ],
                 ),
-                isCart == false
-                    ? Container(
-                        margin: EdgeInsets.only(right: 15, top: 5),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: 30,
-                      )
-                    : Container(
-                        width: 90,
-                        margin: EdgeInsets.only(top: 5),
-                        // child: Text(
-                        //   // 'Đơn vị: 50 gram'
-                        //   'SL : 1',
-                        //   style: TextStyle(
-                        //       fontSize: 15, fontWeight: FontWeight.w500),
-                        // ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Color.fromRGBO(2, 134, 17, 1),
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              ),
-                              onTap: () {},
-                            ),
-                            Text(
-                              '0',
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color.fromARGB(255, 42, 42, 42)),
-                            ),
-                            GestureDetector(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Color.fromRGBO(2, 134, 17, 1)
-                                    // color: Colors.red
-                                    ,
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: Icon(
-                                  Icons.remove,
-                                  size: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onTap: () {},
-                            ),
-                          ],
+                Container(
+                  width: 90,
+                  margin: EdgeInsets.only(top: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(2, 134, 17, 1),
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                         ),
-                      )
+                        onTap: () {
+                          setState(() {
+                            count = count! + 1;
+                          });
+                          reviewCartProvider?.updateReviewCartData(
+                            cartId: widget.productId,
+                            cartImage: widget.productImage,
+                            cartName: widget.productName,
+                            cartPrice: widget.productPrice,
+                            cartQuantity: count,
+                          );
+                        },
+                      ),
+                      Text(
+                        count!.toString(),
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
+                            color: Color.fromARGB(255, 42, 42, 42)),
+                      ),
+                      InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(2, 134, 17, 1)
+                              // color: Colors.red
+                              ,
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Icon(
+                            Icons.remove,
+                            size: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            count = count! - 1;
+                          });
+                          reviewCartProvider?.updateReviewCartData(
+                            cartId: widget.productId,
+                            cartImage: widget.productImage,
+                            cartName: widget.productName,
+                            cartPrice: widget.productPrice,
+                            cartQuantity: count,
+                          );
+                          if (count == 0) {
+                            reviewCartProvider
+                                ?.reviewCartDataDelete(widget.productId);
+                            Fluttertoast.showToast(
+                                msg: "Xóa SP khỏi giỏ hàng thành công",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red[500],
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
@@ -138,31 +187,28 @@ class SingleItem extends StatelessWidget {
           child: Container(
               margin: EdgeInsets.all(15),
               padding: EdgeInsets.all(5),
-              decoration: isCart == false
-                  ? BoxDecoration(
-                      color: Color.fromRGBO(2, 134, 17, 1),
-                      borderRadius: BorderRadius.circular(30),
-                    )
-                  : BoxDecoration(
-                      color: Color.fromARGB(255, 214, 214, 214),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-              child: isCart == false
-                  ? Center(
-                      child: Container(
-                          child: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 20,
-                      )),
-                    )
-                  : Center(
-                      child: Icon(
-                        Icons.delete_outlined,
-                        color: Color.fromARGB(255, 42, 42, 42),
-                        size: 20,
-                      ),
-                    )),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 214, 214, 214),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: InkWell(
+                onTap: () => {
+                  reviewCartProvider?.reviewCartDataDelete(widget.productId),
+                  Fluttertoast.showToast(
+                      msg: "Xóa SP khỏi giỏ hàng thành công",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red[500],
+                      textColor: Colors.white,
+                      fontSize: 16.0)
+                },
+                child: Icon(
+                  Icons.delete_outlined,
+                  color: Color.fromARGB(255, 42, 42, 42),
+                  size: 20,
+                ),
+              )),
         ),
       ],
     );
