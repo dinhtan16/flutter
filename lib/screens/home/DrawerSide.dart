@@ -4,6 +4,7 @@ import 'package:foodorder_app/screens/notificate/Notifications.dart';
 import 'package:foodorder_app/screens/profile/Profile.dart';
 import 'package:foodorder_app/screens/home/HomeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:foodorder_app/screens/wishlist/wish-list.dart';
 
 class DrawerSide extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -101,6 +102,16 @@ class DrawerSide extends StatelessWidget {
               },
             ),
             listTile(
+                icon: Icons.favorite_outline_sharp,
+                title: 'Xem sau',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => WishLsit(),
+                    ),
+                  );
+                }),
+            listTile(
                 icon: Icons.supervised_user_circle_sharp,
                 title: 'Tài khoản của tôi',
                 onTap: () {
@@ -120,8 +131,6 @@ class DrawerSide extends StatelessWidget {
                     ),
                   );
                 }),
-            listTile(
-                icon: Icons.rate_review_outlined, title: 'Đánh giá của tôi'),
             listTile(
                 icon: Icons.request_page_outlined, title: 'Yêu cầu hỗ trợ'),
             listTile(icon: Icons.question_answer_outlined, title: 'Hỏi đáp'),

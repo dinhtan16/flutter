@@ -58,11 +58,13 @@ class WishListProvider with ChangeNotifier {
 
 ////////// Delete WishList /////
   deleteWishtList(wishListId) {
+    print(wishListId);
     FirebaseFirestore.instance
         .collection("WishList")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection("YourWishList")
         .doc(wishListId)
         .delete();
+    notifyListeners();
   }
 }

@@ -62,74 +62,6 @@ class _CountState extends State<Count> {
         SizedBox(
           height: 10,
         ),
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () {
-                  if (count == 1) {
-                    setState(() {
-                      isTrue = false;
-                      count = 0;
-                    });
-                    reviewCartProvider.reviewCartDataDelete(widget.productId);
-                    Fluttertoast.showToast(
-                        msg: "Xóa SP khỏi giỏ hàng thành công",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red[500],
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                  } else if (count > 0) {
-                    setState(() {
-                      count--;
-                    });
-                    reviewCartProvider.updateReviewCartData(
-                      cartId: widget.productId,
-                      cartImage: widget.productImage,
-                      cartName: widget.productName,
-                      cartPrice: widget.productPrice,
-                      cartQuantity: count,
-                    );
-                  }
-                },
-                child: Icon(
-                  Icons.remove,
-                  size: 15,
-                  color: Color(0xffd0b84c),
-                ),
-              ),
-              Text(
-                '$count',
-                style: TextStyle(
-                  color: Color(0xffd0b84c),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    count++;
-                  });
-                  reviewCartProvider.updateReviewCartData(
-                    cartId: widget.productId,
-                    cartImage: widget.productImage,
-                    cartName: widget.productName,
-                    cartPrice: widget.productPrice,
-                    cartQuantity: count,
-                  );
-                },
-                child: Icon(
-                  Icons.add,
-                  size: 15,
-                  color: Color(0xffd0b84c),
-                ),
-              ),
-            ],
-          ),
-        ),
         Container(
           margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
           width: 200,
@@ -159,7 +91,7 @@ class _CountState extends State<Count> {
                       cartImage: widget.productImage,
                       cartName: widget.productName,
                       cartPrice: widget.productPrice,
-                      cartQuantity: count,
+                      cartQuantity: 1,
                       cartUnit: widget.productUnit,
                     );
                     Fluttertoast.showToast(

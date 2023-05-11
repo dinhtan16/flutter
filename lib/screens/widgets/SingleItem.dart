@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:currency_formatter/currency_formatter.dart';
 import 'package:foodorder_app/providers/review_cart_provider.dart';
+import 'package:foodorder_app/providers/wishlist_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SingleItem extends StatefulWidget {
-  bool? isBool = false;
+  bool? isBool;
   String? productImage;
   String? productName;
   bool? wishList = false;
@@ -15,12 +16,10 @@ class SingleItem extends StatefulWidget {
   String? productId;
   int? productQuantity;
   Function? onDelete;
-  var productUnit;
   SingleItem(
       {this.isCart,
       this.productQuantity,
       this.productId,
-      this.productUnit,
       this.onDelete,
       this.isBool,
       this.productImage,
@@ -34,11 +33,12 @@ class SingleItem extends StatefulWidget {
 
 class _SingleItemState extends State<SingleItem> {
   ReviewCartProvider? reviewCartProvider;
+  WishListProvider? wishListProvider;
 
   int? count;
   getCount() {
     setState(() {
-      count = widget.productQuantity!;
+      count = widget.productQuantity ?? 0;
     });
   }
 
@@ -54,6 +54,8 @@ class _SingleItemState extends State<SingleItem> {
   Widget build(BuildContext context) {
     getCount();
     reviewCartProvider = Provider.of<ReviewCartProvider>(context);
+    wishListProvider = Provider.of<WishListProvider>(context);
+
     reviewCartProvider?.getReviewCartData();
     var priceNumber = 0;
     try {
@@ -162,8 +164,11 @@ class _SingleItemState extends State<SingleItem> {
                             cartQuantity: count,
                           );
                           if (count == 0) {
-                            reviewCartProvider
-                                ?.reviewCartDataDelete(widget.productId);
+                            widget.isBool == false
+                                ? reviewCartProvider
+                                    ?.reviewCartDataDelete(widget.productId)
+                                : wishListProvider!
+                                    .deleteWishtList(widget.productId);
                             Fluttertoast.showToast(
                                 msg: "Xóa SP khỏi giỏ hàng thành công",
                                 toastLength: Toast.LENGTH_SHORT,
@@ -193,7 +198,10 @@ class _SingleItemState extends State<SingleItem> {
               ),
               child: InkWell(
                 onTap: () => {
-                  reviewCartProvider?.reviewCartDataDelete(widget.productId),
+                  widget.isBool == false
+                      ? reviewCartProvider
+                          ?.reviewCartDataDelete(widget.productId)
+                      : wishListProvider!.deleteWishtList(widget.productId),
                   Fluttertoast.showToast(
                       msg: "Xóa SP khỏi giỏ hàng thành công",
                       toastLength: Toast.LENGTH_SHORT,

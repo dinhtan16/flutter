@@ -7,7 +7,7 @@ class ProductCart extends StatefulWidget {
   final String? productImage;
   final String? productName;
   final String? productPrice;
-  final Function? onTap;
+  final void Function()? onTap;
   final String? productId;
   final ProductModel? productUnit;
   ProductCart(
@@ -64,9 +64,7 @@ class _ProductCartState extends State<ProductCart> {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               GestureDetector(
-                  onTap: () {
-                    widget.onTap!;
-                  },
+                  onTap: widget.onTap,
                   child: Container(
                       height: 120,
                       padding: EdgeInsets.all(0),
