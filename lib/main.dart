@@ -48,7 +48,9 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        home: StreamBuilder(
+        home: Scaffold(
+          backgroundColor: Colors.teal,
+          StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapShot) {
             if (snapShot.hasData) {
@@ -58,6 +60,7 @@ class MyApp extends StatelessWidget {
           },
         ),
       ),
+     ),   
     );
   }
 }
