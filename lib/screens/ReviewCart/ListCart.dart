@@ -96,7 +96,7 @@ class ListCart extends StatelessWidget {
         backgroundColor: Color.fromRGBO(2, 134, 17, 1),
         title: Text('Giỏ hàng'),
       ),
-      body: reviewCartProvider?.getReviewCartDataList == null
+      body: reviewCartProvider?.getReviewCartDataList.length == 0
           ? Center(
               child: Text(
                 "Giỏ hàng trống!!!",
@@ -114,7 +114,7 @@ class ListCart extends StatelessWidget {
                       height: 10,
                     ),
                     SingleItem(
-                      isBool: true,
+                      isBool: false,
                       wishList: false,
                       productImage: data.cartImage,
                       productName: data.cartName,

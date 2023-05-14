@@ -105,83 +105,86 @@ class _SingleItemState extends State<SingleItem> {
                 Container(
                   width: 90,
                   margin: EdgeInsets.only(top: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(2, 134, 17, 1),
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 20,
-                          ),
+                  child: widget.isBool == true
+                      ? SizedBox(width: 0, height: 0)
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(2, 134, 17, 1),
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  count = count! + 1;
+                                });
+                                reviewCartProvider?.updateReviewCartData(
+                                  cartId: widget.productId,
+                                  cartImage: widget.productImage,
+                                  cartName: widget.productName,
+                                  cartPrice: widget.productPrice,
+                                  cartQuantity: count,
+                                );
+                              },
+                            ),
+                            Text(
+                              count!.toString(),
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color.fromARGB(255, 42, 42, 42)),
+                            ),
+                            InkWell(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(2, 134, 17, 1)
+                                    // color: Colors.red
+                                    ,
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: Icon(
+                                  Icons.remove,
+                                  size: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  count = count! - 1;
+                                });
+                                reviewCartProvider?.updateReviewCartData(
+                                  cartId: widget.productId,
+                                  cartImage: widget.productImage,
+                                  cartName: widget.productName,
+                                  cartPrice: widget.productPrice,
+                                  cartQuantity: count,
+                                );
+                                if (count == 0) {
+                                  widget.isBool == false
+                                      ? reviewCartProvider
+                                          ?.reviewCartDataDelete(
+                                              widget.productId)
+                                      : wishListProvider!
+                                          .deleteWishtList(widget.productId);
+                                  Fluttertoast.showToast(
+                                      msg: "Xóa SP khỏi giỏ hàng thành công",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red[500],
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                }
+                              },
+                            ),
+                          ],
                         ),
-                        onTap: () {
-                          setState(() {
-                            count = count! + 1;
-                          });
-                          reviewCartProvider?.updateReviewCartData(
-                            cartId: widget.productId,
-                            cartImage: widget.productImage,
-                            cartName: widget.productName,
-                            cartPrice: widget.productPrice,
-                            cartQuantity: count,
-                          );
-                        },
-                      ),
-                      Text(
-                        count!.toString(),
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromARGB(255, 42, 42, 42)),
-                      ),
-                      InkWell(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(2, 134, 17, 1)
-                              // color: Colors.red
-                              ,
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Icon(
-                            Icons.remove,
-                            size: 20,
-                            color: Colors.white,
-                          ),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            count = count! - 1;
-                          });
-                          reviewCartProvider?.updateReviewCartData(
-                            cartId: widget.productId,
-                            cartImage: widget.productImage,
-                            cartName: widget.productName,
-                            cartPrice: widget.productPrice,
-                            cartQuantity: count,
-                          );
-                          if (count == 0) {
-                            widget.isBool == false
-                                ? reviewCartProvider
-                                    ?.reviewCartDataDelete(widget.productId)
-                                : wishListProvider!
-                                    .deleteWishtList(widget.productId);
-                            Fluttertoast.showToast(
-                                msg: "Xóa SP khỏi giỏ hàng thành công",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.red[500],
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                          }
-                        },
-                      ),
-                    ],
-                  ),
                 )
               ],
             ),

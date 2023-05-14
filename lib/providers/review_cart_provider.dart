@@ -96,9 +96,11 @@ class ReviewCartProvider with ChangeNotifier {
 
   getTotalPrice() {
     double total = 0;
-    reviewCartDataList.forEach((element) {
-      total += int.parse(element.cartPrice!) * element.cartQuantity!;
-    });
+    reviewCartDataList.length > 0
+        ? reviewCartDataList.forEach((element) {
+            total += int.parse(element.cartPrice!) * element.cartQuantity!;
+          })
+        : [];
     return total;
   }
 

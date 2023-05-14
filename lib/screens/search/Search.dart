@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:foodorder_app/models/product_model.dart';
+import 'package:foodorder_app/screens/search/SearchItem.dart';
 import 'package:foodorder_app/screens/widgets/SingleItem.dart';
 
 class Search extends StatefulWidget {
@@ -74,8 +75,7 @@ class _SearchState extends State<Search> {
           Expanded(
               child: ListView(
             children: _searchItem.map((data) {
-              return SingleItem(
-                isCart: false,
+              return SearchItem(
                 productImage: data.productImage,
                 productName: data.productName,
                 productPrice: data.productPrice,
