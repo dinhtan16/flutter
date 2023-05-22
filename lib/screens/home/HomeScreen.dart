@@ -228,12 +228,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     productProvider = Provider.of(context);
-    // UserProvider userProvider = Provider.of(context);
-    // userProvider.getUserData();
+    UserProvider userProvider = Provider.of(context);
+    userProvider.getUserData();
     return Scaffold(
-        // drawer: DrawerSide(: userProvider),
+        drawer: DrawerSide(userProvider: userProvider),
         backgroundColor: Color.fromARGB(255, 245, 245, 245),
-        drawer: DrawerSide(),
+        // drawer: DrawerSide(),
         appBar: AppBar(
           iconTheme: IconThemeData(color: Color.fromRGBO(2, 134, 17, 1)),
           backgroundColor: Color.fromARGB(255, 255, 255, 255),

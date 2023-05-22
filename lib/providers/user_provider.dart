@@ -38,7 +38,7 @@ class UserProvider with ChangeNotifier {
     if (value.exists) {
       userModel = UserModel(
         userEmail: value.get("userEmail"),
-        userImage: value.get("userImage"),
+        userImage: value.get('userImage'),
         userName: value.get("userName"),
         userUid: value.get("userUid"),
       );

@@ -5,8 +5,16 @@ import 'package:foodorder_app/screens/profile/Profile.dart';
 import 'package:foodorder_app/screens/home/HomeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodorder_app/screens/wishlist/wish-list.dart';
+import 'package:foodorder_app/providers/user_provider.dart';
 
-class DrawerSide extends StatelessWidget {
+class DrawerSide extends StatefulWidget {
+  UserProvider? userProvider;
+  DrawerSide({this.userProvider});
+  @override
+  _DrawerSideState createState() => _DrawerSideState();
+}
+
+class _DrawerSideState extends State<DrawerSide> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   Widget listTile(
       {IconData? icon, String? title, Function()? onTap, String? colorState}) {
@@ -29,6 +37,8 @@ class DrawerSide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userData = widget.userProvider?.currentUserData;
+    print(userData);
     return Drawer(
       child: Container(
         child: ListView(
@@ -42,6 +52,10 @@ class DrawerSide extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 32,
                     backgroundColor: Color.fromRGBO(2, 134, 17, 1),
+                    backgroundImage: NetworkImage(
+                      userData?.userImage ??
+                          "https://antimatter.vn/wp-content/uploads/2022/11/anh-avatar-trang-fb-mac-dinh.jpg",
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -52,30 +66,34 @@ class DrawerSide extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 7),
-                      child: Text('Welcome, User'),
+                      child: Text('Xin chào, ${userData?.userName}'),
                     ),
                     SizedBox(
                       height: 7,
                     ),
-                    Container(
-                      height: 25,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            side: BorderSide(
-                                width: 0.9,
-                                color: Color.fromRGBO(2, 134, 17, 1)),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            )),
-                        onPressed: () {},
-                        child: Text(
-                          'Đăng nhập',
-                          style: TextStyle(
-                            color: Color.fromRGBO(2, 134, 17, 1),
-                          ),
-                        ),
-                      ),
-                    )
+                    userData != null
+                        ? SizedBox(
+                            height: 0,
+                          )
+                        : Container(
+                            height: 25,
+                            child: OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      width: 0.9,
+                                      color: Color.fromRGBO(2, 134, 17, 1)),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  )),
+                              onPressed: () {},
+                              child: Text(
+                                'Đăng nhập',
+                                style: TextStyle(
+                                  color: Color.fromRGBO(2, 134, 17, 1),
+                                ),
+                              ),
+                            ),
+                          )
                   ],
                 )
               ],
