@@ -59,20 +59,15 @@ class _CountState extends State<Count> {
     ReviewCartProvider reviewCartProvider = Provider.of(context);
     return Container(
       child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        SizedBox(
-          height: 10,
-        ),
         Container(
           margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
           width: 200,
-          height: 76,
+          height: 75,
           child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
               child: Container(
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                height: 40,
-                width: 140,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,

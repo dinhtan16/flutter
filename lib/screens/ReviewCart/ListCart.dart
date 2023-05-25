@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodorder_app/models/review_cart_model.dart';
 import 'package:foodorder_app/providers/review_cart_provider.dart';
-import 'package:foodorder_app/screens/check-out/delivery-detail/DeliveryDerail.dart';
+import 'package:foodorder_app/screens/check-out/delivery-detail/DeliveryDetail.dart';
 import 'package:foodorder_app/screens/widgets/SingleItem.dart';
 import 'package:provider/provider.dart';
 

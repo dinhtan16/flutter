@@ -55,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
               (fastFoodData) {
                 return ProductCart(
                   onTap: () {
-                    print(213);
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => ProductDetail(

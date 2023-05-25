@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
-Color primaryColor = Color(0xffd1ad17);
+Color primaryColor = Color.fromRGBO(2, 134, 17, 1);
 Color scaffoldBackgroundColor = Color(0xffcbcbcb);
 Color textColor = Colors.black87;
