@@ -51,8 +51,8 @@ class CheckoutProvider with ChangeNotifier {
           .collection("AddDeliverAddress")
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .set({
-        "firstname": firstName.text,
         "lastname": lastName.text,
+        "firstname": firstName.text,
         "mobileNo": mobileNo.text,
         "alternateMobileNo": alternateMobileNo.text,
         "scoiety": scoiety.text,
