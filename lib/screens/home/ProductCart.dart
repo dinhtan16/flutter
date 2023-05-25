@@ -55,7 +55,7 @@ class _ProductCartState extends State<ProductCart> {
       child: Row(children: [
         Container(
           margin: EdgeInsets.symmetric(horizontal: 5),
-          height: 280,
+          height: 270,
           width: 160,
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(15)),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodorder_app/config/colors.dart';
 import 'package:foodorder_app/models/delivery_address_model.dart';
 import 'package:foodorder_app/providers/check_out_provider.dart';
+import 'package:foodorder_app/screens/check-out/add_delivery_address/add_delivery_address.dart';
 // import 'package:foodorder_app/screens/check_out/add_delivery_address/add_delivery_address.dart';
 import 'package:foodorder_app/screens/check-out/delivery-detail/single_delivery_item.dart';
 import 'package:foodorder_app/screens/home/HomeScreen.dart';
@@ -52,7 +53,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
             deliveryAddressProvider.getDeliveryAddressList.isEmpty
                 ? Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => HomeScreen(),
+                      builder: (context) => AddDeliverAddress(),
                     ),
                   )
                 : Navigator.of(context).push(
