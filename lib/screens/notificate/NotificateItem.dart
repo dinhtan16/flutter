@@ -2,19 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
-// class NotificateItem extends StatelessWidget {
-//   final int? id;
-//   final String? title;
-//   NotificateItem({this.id, this.title});
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: MediaQuery.of(context).size.width,
-//       height: 150,
-//     );
-//   }
-// }
-
 class NotificationItem extends StatelessWidget {
   final String? title;
   final String? message;

@@ -8,7 +8,6 @@ import 'package:foodorder_app/screens/widgets/SingleItem.dart';
 import 'package:provider/provider.dart';
 
 class ListCart extends StatelessWidget {
-  // ReviewCartProvider? reviewCartProvider;
   ReviewCartProvider? reviewCartProvider;
   WishListProvider? wishListProvider;
   showAlertDialog(BuildContext context, ReviewCartModel delete) {

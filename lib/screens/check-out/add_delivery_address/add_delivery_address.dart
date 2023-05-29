@@ -39,7 +39,9 @@ class _AddDeliverAddressState extends State<AddDeliverAddress> {
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         height: 48,
         child: MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+            checkoutProvider.validator(context, myType);
+          },
           child: Text(
             "Thêm mới",
             style: TextStyle(

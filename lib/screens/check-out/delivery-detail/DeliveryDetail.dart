@@ -3,6 +3,7 @@ import 'package:foodorder_app/config/colors.dart';
 import 'package:foodorder_app/providers/check_out_provider.dart';
 import 'package:foodorder_app/screens/check-out/add_delivery_address/add_delivery_address.dart';
 import 'package:foodorder_app/screens/check-out/delivery-detail/single_delivery_item.dart';
+import 'package:foodorder_app/screens/check-out/payment/payment.dart';
 import 'package:foodorder_app/screens/home/HomeScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +47,13 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                       fontWeight: FontWeight.w500,
                       color: Colors.white),
                 )
-              : Text("Payment Summary"),
+              : Text(
+                  "Tiếp tục thanh toán",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                ),
           onPressed: () {
             deliveryAddressProvider.getDeliveryAddressList.isEmpty
                 ? Navigator.of(context).push(
@@ -56,7 +63,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                   )
                 : Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => HomeScreen(
+                      builder: (context) => Payment(
                           // deliverAddressList: value,
                           ),
                     ),
@@ -97,16 +104,16 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
             height: 1,
             color: Color.fromARGB(255, 42, 42, 42),
           ),
-          !deliveryAddressProvider.getDeliveryAddressList.isEmpty
+          deliveryAddressProvider.getDeliveryAddressList.isEmpty
               ? Container(
                   height: MediaQuery.of(context).size.height - 250,
                   child: Center(
                     child: Text(
                       "Đỉa chỉ mặc định trống",
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 0, 0, 0)),
+                          color: Color.fromARGB(255, 53, 53, 53)),
                     ),
                   ),
                 )
@@ -119,20 +126,6 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                           '828 sư vạn hạnh , phường 13 , quận 10 , thành phố Hồ Chí Minh',
                       addressType: 'công ty',
                     ),
-                    SingleDeliveryItem(
-                      title: 'Thanh Hiếu',
-                      number: '0393297011',
-                      address:
-                          '828 sư vạn hạnh , phường 13 , quận 10 , thành phố Hồ Chí Minh',
-                      addressType: 'công ty',
-                    ),
-                    SingleDeliveryItem(
-                      title: 'Thanh Hiếu',
-                      number: '0393297011',
-                      address:
-                          '828 sư vạn hạnh , phường 13 , quận 10 , thành phố Hồ Chí Minh',
-                      addressType: 'công ty',
-                    )
                   ],
                 )
         ],

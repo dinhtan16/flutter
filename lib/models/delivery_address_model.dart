@@ -5,13 +5,14 @@ class DeliveryAddressModel {
   String? ward;
   String? district;
   String? city;
+  String? addressType;
 
-  DeliveryAddressModel({
-    this.fullname,
-    this.phone,
-    this.street,
-    this.ward,
-    this.district,
-    this.city,
-  });
+  DeliveryAddressModel(
+      {this.fullname,
+      this.phone,
+      this.street,
+      this.ward,
+      this.district,
+      this.city,
+      this.addressType});
 }
