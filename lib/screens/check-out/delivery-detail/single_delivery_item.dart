@@ -11,33 +11,49 @@ class SingleDeliveryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: 10),
         ListTile(
-          leading: Center(
-              child: CircleAvatar(
+          leading: CircleAvatar(
             radius: 8,
             backgroundColor: primaryColor,
-          )),
-          title: Text(title!),
+          ),
+          title: Text(
+            title!,
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          ),
           subtitle: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Text(title!),
-              // SizedBox(
-              //   height: 5,
-              // ),
-              Text(address!),
               SizedBox(
                 height: 5,
               ),
-              Text(number!),
+              Text(
+                address!,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                number!,
+                style: TextStyle(fontSize: 16),
+              ),
             ],
           ),
-          trailing: Icon(Icons.more_vert),
-        ),
-        Divider(
-          height: 35,
-        ),
+          trailing: Container(
+            padding: EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+            decoration: BoxDecoration(
+                color: primaryColor, borderRadius: BorderRadius.circular(5)),
+            child: Text(
+              addressType!,
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+            ),
+          ),
+        )
       ],
     );
   }

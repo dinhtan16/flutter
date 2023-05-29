@@ -52,50 +52,53 @@ class ListCart extends StatelessWidget {
     reviewCartProvider?.getReviewCartData();
 
     return Scaffold(
-      bottomNavigationBar: ListTile(
-        title: Text(
-          'Tổng tiền:',
-          style: TextStyle(
-              color: Colors.black, fontSize: 19, fontWeight: FontWeight.w600),
-        ),
-        subtitle: Container(
-          margin: EdgeInsets.only(top: 10),
-          child: Text(
-            "\ ${reviewCartProvider?.getTotalPrice()}VND",
-            style: TextStyle(
-                fontSize: 20,
-                color: Color.fromRGBO(223, 46, 56, 1),
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-        trailing: Container(
-          child: MaterialButton(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-            child: Text(
-              'Thanh toán',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold),
-            ),
-            color: Color.fromRGBO(2, 134, 17, 1),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            onPressed: () {
-              if (reviewCartProvider!.getReviewCartDataList.isEmpty) {
-                Fluttertoast.showToast(msg: "No Cart Data Found");
-              }
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => DeliveryDetails(),
+      bottomNavigationBar: reviewCartProvider?.getReviewCartDataList.length != 0
+          ? ListTile(
+              title: Text(
+                'Tổng tiền:',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 19,
+                    fontWeight: FontWeight.w600),
+              ),
+              subtitle: Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Text(
+                  "\ ${reviewCartProvider?.getTotalPrice()}VND",
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Color.fromRGBO(223, 46, 56, 1),
+                      fontWeight: FontWeight.bold),
                 ),
-              );
-            },
-          ),
-        ),
-        contentPadding:
-            EdgeInsets.only(top: 15, bottom: 40, right: 20, left: 20),
-      ),
+              ),
+              trailing: Container(
+                child: MaterialButton(
+                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+                    child: Text(
+                      'Thanh toán',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    color: Color.fromRGBO(2, 134, 17, 1),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DeliveryDetails(),
+                        ),
+                      );
+                    }),
+              ),
+              contentPadding:
+                  EdgeInsets.only(top: 15, bottom: 40, right: 20, left: 20),
+            )
+          : SizedBox(
+              width: 0,
+              height: 0,
+            ),
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(2, 134, 17, 1),
         title: Text('Giỏ hàng'),

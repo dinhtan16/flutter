@@ -1,27 +1,17 @@
 class DeliveryAddressModel {
-  String? firstName;
-  String? lastName;
-  String? mobileNo;
-  String? alternateMobileNo;
-  String? scoirty;
+  String? fullname;
+  String? phone;
   String? street;
-  String? landMark;
+  String? ward;
+  String? district;
   String? city;
-  String? aera;
-  String? pinCode;
-  String? addressType;
 
   DeliveryAddressModel({
-    this.addressType,
-    this.aera,
-    this.alternateMobileNo,
-    this.city,
-    this.firstName,
-    this.landMark,
-    this.lastName,
-    this.mobileNo,
-    this.pinCode,
+    this.fullname,
+    this.phone,
     this.street,
-    this.scoirty,
+    this.ward,
+    this.district,
+    this.city,
   });
 }

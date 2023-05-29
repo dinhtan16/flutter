@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodorder_app/config/colors.dart';
+import 'package:foodorder_app/providers/check_out_provider.dart';
 import 'package:foodorder_app/screens/check-out/add_delivery_address/custom_text_field.dart';
 
 import 'package:provider/provider.dart';
@@ -25,7 +26,7 @@ class _AddDeliverAddressState extends State<AddDeliverAddress> {
 
   @override
   Widget build(BuildContext context) {
-    // CheckoutProvider checkoutProvider = Provider.of(context);
+    CheckoutProvider checkoutProvider = Provider.of(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -58,16 +59,32 @@ class _AddDeliverAddressState extends State<AddDeliverAddress> {
         ),
         child: ListView(
           children: [
-            CustomTextField(labelText: 'Họ'),
-            CustomTextField(labelText: 'Tên'),
-            CustomTextField(labelText: 'Số điện thoại'),
-            CustomTextField(labelText: 'Số Nhà'),
-            CustomTextField(labelText: 'Đường'),
-            CustomTextField(labelText: 'Phường / Xã'),
-            CustomTextField(labelText: 'Quận'),
-            CustomTextField(labelText: 'Thành Phố'),
+            CustomTextField(
+              labelText: 'Họ Tên',
+              controller: checkoutProvider.fullname,
+            ),
+            CustomTextField(
+              labelText: 'Số điện thoại',
+              controller: checkoutProvider.phone,
+            ),
+            CustomTextField(
+              labelText: 'Số nhà , Đường',
+              controller: checkoutProvider.street,
+            ),
+            CustomTextField(
+              labelText: 'Phường / Xã',
+              controller: checkoutProvider.ward,
+            ),
+            CustomTextField(
+              labelText: 'Quận',
+              controller: checkoutProvider.district,
+            ),
+            CustomTextField(
+              labelText: 'Thành Phố',
+              controller: checkoutProvider.city,
+            ),
             InkWell(
-              onTap: () => {},
+              onTap: () => {checkoutProvider.validator(context, myType)},
               child: Container(
                 height: 47,
                 width: double.infinity,
@@ -86,18 +103,19 @@ class _AddDeliverAddressState extends State<AddDeliverAddress> {
             ),
             RadioListTile(
               value: AddressTypes.Home,
+              activeColor: primaryColor,
               groupValue: myType,
               title: Text("Nhà riêng"),
               onChanged: (value) {
                 setState(() {
                   myType = value;
                 });
-                // print(value);
               },
               secondary: Icon(Icons.home, color: Colors.black),
             ),
             RadioListTile(
               value: AddressTypes.Work,
+              activeColor: primaryColor,
               groupValue: myType,
               title: Text("Công ty"),
               onChanged: (value) {

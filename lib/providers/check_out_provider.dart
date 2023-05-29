@@ -9,61 +9,47 @@ import 'package:location/location.dart';
 class CheckoutProvider with ChangeNotifier {
   bool isloadding = false;
 
-  TextEditingController firstName = TextEditingController();
-  TextEditingController lastName = TextEditingController();
-  TextEditingController mobileNo = TextEditingController();
-  TextEditingController alternateMobileNo = TextEditingController();
-  TextEditingController scoiety = TextEditingController();
+  TextEditingController fullname = TextEditingController();
+  TextEditingController phone = TextEditingController();
   TextEditingController street = TextEditingController();
-  TextEditingController landmark = TextEditingController();
+  TextEditingController ward = TextEditingController();
+  TextEditingController district = TextEditingController();
   TextEditingController city = TextEditingController();
-  TextEditingController aera = TextEditingController();
-  TextEditingController pincode = TextEditingController();
   LocationData? setLoaction;
 
   void validator(context, myType) async {
-    if (firstName.text.isEmpty) {
-      Fluttertoast.showToast(msg: "firstname is empty");
-    } else if (lastName.text.isEmpty) {
-      Fluttertoast.showToast(msg: "lastname is empty");
-    } else if (mobileNo.text.isEmpty) {
-      Fluttertoast.showToast(msg: "mobileNo is empty");
-    } else if (alternateMobileNo.text.isEmpty) {
-      Fluttertoast.showToast(msg: "alternateMobileNo is empty");
-    } else if (scoiety.text.isEmpty) {
-      Fluttertoast.showToast(msg: "scoiety is empty");
+    if (fullname.text.isEmpty) {
+      Fluttertoast.showToast(msg: "fullname is empty");
+    } else if (phone.text.isEmpty) {
+      Fluttertoast.showToast(msg: "phone is empty");
     } else if (street.text.isEmpty) {
       Fluttertoast.showToast(msg: "street is empty");
-    } else if (landmark.text.isEmpty) {
-      Fluttertoast.showToast(msg: "landmark is empty");
+    } else if (ward.text.isEmpty) {
+      Fluttertoast.showToast(msg: "ward is empty");
+    } else if (district.text.isEmpty) {
+      Fluttertoast.showToast(msg: "district is empty");
     } else if (city.text.isEmpty) {
       Fluttertoast.showToast(msg: "city is empty");
-    } else if (aera.text.isEmpty) {
-      Fluttertoast.showToast(msg: "aera is empty");
-    } else if (pincode.text.isEmpty) {
-      Fluttertoast.showToast(msg: "pincode is empty");
-    } else if (setLoaction == null) {
-      Fluttertoast.showToast(msg: "setLoaction is empty");
-    } else {
+    }
+    // else if (setLoaction == null) {
+    //   Fluttertoast.showToast(msg: "setLoaction is empty");
+    // }
+    else {
       isloadding = true;
       notifyListeners();
       await FirebaseFirestore.instance
           .collection("AddDeliverAddress")
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .set({
-        "lastname": lastName.text,
-        "firstname": firstName.text,
-        "mobileNo": mobileNo.text,
-        "alternateMobileNo": alternateMobileNo.text,
-        "scoiety": scoiety.text,
+        "fullname": fullname.text,
+        "phone": phone.text,
         "street": street.text,
-        "landmark": landmark.text,
+        "ward": ward.text,
+        "district": district.text,
         "city": city.text,
-        "aera": aera.text,
-        "pincode": pincode.text,
         "addressType": myType.toString(),
-        "longitude": setLoaction!.longitude,
-        "latitude": setLoaction!.latitude,
+        // "longitude": setLoaction!.longitude,
+        // "latitude": setLoaction!.latitude,
       }).then((value) async {
         isloadding = false;
         notifyListeners();
@@ -86,17 +72,13 @@ class CheckoutProvider with ChangeNotifier {
         .get();
     if (_db.exists) {
       deliveryAddressModel = DeliveryAddressModel(
-        firstName: _db.get("firstname"),
-        lastName: _db.get("lastname"),
-        addressType: _db.get("addressType"),
-        aera: _db.get("aera"),
-        alternateMobileNo: _db.get("alternateMobileNo"),
-        city: _db.get("city"),
-        landMark: _db.get("landmark"),
-        mobileNo: _db.get("mobileNo"),
-        pinCode: _db.get("pincode"),
-        scoirty: _db.get("scoiety"),
+        fullname: _db.get("fullname"),
+        phone: _db.get("phone"),
         street: _db.get("street"),
+        ward: _db.get("ward"),
+        district: _db.get("district"),
+        city: _db.get("city"),
+        // addressType: _db.get("addressType"),
       );
       newList.add(deliveryAddressModel);
       notifyListeners();

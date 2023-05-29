@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:foodorder_app/config/colors.dart';
-import 'package:foodorder_app/models/delivery_address_model.dart';
 import 'package:foodorder_app/providers/check_out_provider.dart';
 import 'package:foodorder_app/screens/check-out/add_delivery_address/add_delivery_address.dart';
-// import 'package:foodorder_app/screens/check_out/add_delivery_address/add_delivery_address.dart';
 import 'package:foodorder_app/screens/check-out/delivery-detail/single_delivery_item.dart';
 import 'package:foodorder_app/screens/home/HomeScreen.dart';
-// import 'package:foodorder_app/screens/check_out/payment_summary/payment_summary.dart';
 import 'package:provider/provider.dart';
 
 class DeliveryDetails extends StatefulWidget {
@@ -15,27 +12,25 @@ class DeliveryDetails extends StatefulWidget {
 }
 
 class _DeliveryDetailsState extends State<DeliveryDetails> {
-  DeliveryAddressModel? value;
+  //  DeliveryAddressModel value;
   @override
   Widget build(BuildContext context) {
     CheckoutProvider deliveryAddressProvider = Provider.of(context);
     deliveryAddressProvider.getDeliveryAddressData();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chọn địa chỉ giao hàng"),
+        title: Text("Trở lại"),
         backgroundColor: primaryColor,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         child: Icon(Icons.add),
         onPressed: () {
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => AddDeliverAddress(
-
-          //     ),
-          //   ),
-          // );
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => AddDeliverAddress(),
+            ),
+          );
         },
       ),
       bottomNavigationBar: Container(
@@ -46,7 +41,10 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
           child: deliveryAddressProvider.getDeliveryAddressList.isEmpty
               ? Text(
                   "Thêm địa chỉ mới",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
                 )
               : Text("Payment Summary"),
           onPressed: () {
@@ -75,53 +73,68 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
       body: ListView(
         children: [
           ListTile(
-            title: Text(
-              "Giao hàng đến",
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
-            ),
-            leading: Icon(
-              Icons.local_shipping,
-              color: Colors.black,
-              size: 40,
+            title: Row(
+              children: [
+                Icon(
+                  Icons.local_shipping,
+                  size: 35,
+                  color: Color.fromARGB(255, 28, 28, 28),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "Giao hàng đến địa chỉ",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
           ),
           Divider(
-            height: 2,
-            color: Color.fromARGB(255, 86, 86, 86),
+            height: 1,
+            color: Color.fromARGB(255, 42, 42, 42),
           ),
-          deliveryAddressProvider.getDeliveryAddressList.isEmpty
+          !deliveryAddressProvider.getDeliveryAddressList.isEmpty
               ? Container(
-                  height: MediaQuery.of(context).size.height - 200,
+                  height: MediaQuery.of(context).size.height - 250,
                   child: Center(
-                    child: Text("Địa chỉ mặc định trống"),
+                    child: Text(
+                      "Đỉa chỉ mặc định trống",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 0, 0, 0)),
+                    ),
                   ),
                 )
-              : Column(children: [
-                  SingleDeliveryItem(
-                    title: 'haha',
-                    address: 'ronaldo',
-                    addressType: 'home',
-                    number: '0393296011',
-                  )
-                ]
-                  // deliveryAddressProvider.getDeliveryAddressList
-                  //     .map<Widget>((e) {
-                  //   setState(() {
-                  //     value = e;
-                  //   });
-                  //   return SingleDeliveryItem(
-                  //     address:
-                  //         "aera, ${e.aera}, street, ${e.street}, society ${e.scoirty}, pincode ${e.pinCode}",
-                  //     title: "${e.firstName} ${e.lastName}",
-                  //     number: e.mobileNo,
-                  //     addressType: e.addressType == "AddressTypes.Home"
-                  //         ? "Home"
-                  //         : e.addressType == "AddressTypes.Other"
-                  //             ? "Other"
-                  //             : "Work",
-                  //   );
-                  // }).toList(),
-                  )
+              : Column(
+                  children: [
+                    SingleDeliveryItem(
+                      title: 'Thanh Hiếu',
+                      number: '0393297011',
+                      address:
+                          '828 sư vạn hạnh , phường 13 , quận 10 , thành phố Hồ Chí Minh',
+                      addressType: 'công ty',
+                    ),
+                    SingleDeliveryItem(
+                      title: 'Thanh Hiếu',
+                      number: '0393297011',
+                      address:
+                          '828 sư vạn hạnh , phường 13 , quận 10 , thành phố Hồ Chí Minh',
+                      addressType: 'công ty',
+                    ),
+                    SingleDeliveryItem(
+                      title: 'Thanh Hiếu',
+                      number: '0393297011',
+                      address:
+                          '828 sư vạn hạnh , phường 13 , quận 10 , thành phố Hồ Chí Minh',
+                      addressType: 'công ty',
+                    )
+                  ],
+                )
         ],
       ),
     );
