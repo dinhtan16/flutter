@@ -113,8 +113,6 @@ class ReviewCartProvider with ChangeNotifier {
         : [];
     if (shipping != 0) {
       total = (total + shipping!);
-    } else {
-      total = total;
     }
     return total.toStringAsFixed(0);
   }

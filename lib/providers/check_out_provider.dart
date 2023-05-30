@@ -120,6 +120,7 @@ class CheckoutProvider with ChangeNotifier {
           "order_info": orderInfo!
               .map((e) => {
                     "owner_order": e.fullname,
+                    "phone": e.phone,
                     "street": e.street,
                     "ward": e.ward,
                     "district": e.district,
@@ -143,55 +144,3 @@ class CheckoutProvider with ChangeNotifier {
     }
   }
 }
-
-
-
-  // Future<List<Order>> getOrders() async {
-  //   try {
-  //     // Lấy tham chiếu đến bộ sưu tập orders của user hiện tại trên Firestore
-  //     Query ordersRef = FirebaseFirestore.instance
-  //         .collection('users')
-  //         .doc(_auth.currentUser!.uid)
-  //         .collection('listOrders')
-  //         .orderBy('createAt', descending: true);
-
-  //     // Lấy dữ liệu từ Firestore
-  //     QuerySnapshot querySnapshot = await ordersRef.get();
-
-  //     // Lấy danh sách các tài liệu kết quả từ QuerySnapshot
-  //     List<QueryDocumentSnapshot> documents = querySnapshot.docs;
-  //     List<Order> orderList = [];
-
-  //     // Duyệt qua từng tài liệu để lấy thông tin của order
-  //     for (var document in documents) {
-  //       String orderId = document.id;
-  //       String orderName = document['name'];
-  //       double orderTotal = document['total'];
-  //       Timestamp createAt = document['createAt'];
-  //       List<dynamic> orderProducts = document['products'];
-
-  //       // Tạo một danh sách các sản phẩm của order
-  //       List<Products> products = orderProducts.map((productData) {
-  //         String productName = productData['title'];
-  //         int productPrice = productData['price'];
-  //         String productImage = productData["image"];
-  //         return Products(
-  //             title: productName, price: productPrice, image: productImage);
-  //       }).toList();
-
-  //       // Tạo một đối tượng Order chứa thông tin của order
-  //       Order orderData = Order(
-  //           name: orderName,
-  //           total: orderTotal,
-  //           products: products,
-  //           createAt: createAt);
-
-  //       orderList.add(orderData);
-  //     }
-
-  //     return orderList;
-  //   } catch (e) {
-  //     print('Lỗi khi lấy danh sách các order: $e');
-  //     return []; // Trả về danh sách rỗng nếu có lỗi
-  //   }
-  // }

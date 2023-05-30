@@ -110,6 +110,7 @@ class ListCart extends StatelessWidget {
               ),
             )
           : ListView.builder(
+              padding: EdgeInsets.only(top: 20, bottom: 20),
               itemCount: reviewCartProvider?.getReviewCartDataList.length,
               itemBuilder: (context, index) {
                 ReviewCartModel data =
@@ -138,26 +139,6 @@ class ListCart extends StatelessWidget {
                     },
                   ),
                 );
-                //  Column(
-                //   children: [
-                //     SizedBox(
-                //       height: 10,
-                //     ),
-                // SingleItem(
-                //   isBool: false,
-                //   wishList: false,
-                //   productImage: data.cartImage,
-                //   productName: data.cartName,
-                //   productPrice: data.cartPrice,
-                //   productId: data.cartId,
-                //   productQuantity: data.cartQuantity,
-                //   // productUnit: data.cartUnit,
-                //   onDelete: () {
-                //     showAlertDialog(context, data);
-                //   },
-                // ),
-                //   ],
-                // );
               },
             ),
     );
