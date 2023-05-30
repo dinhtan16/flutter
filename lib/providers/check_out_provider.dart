@@ -117,14 +117,16 @@ class CheckoutProvider with ChangeNotifier {
         {
           "order_id": idOrder,
           "order_at": DateTime.now(),
-          "order_info": orderInfo!.map((e) => {
-                "owner_order": e.fullname,
-                "street": e.street,
-                "ward": e.ward,
-                "district": e.district,
-                "city": e.city,
-                "address_type": e.addressType
-              }),
+          "order_info": orderInfo!
+              .map((e) => {
+                    "owner_order": e.fullname,
+                    "street": e.street,
+                    "ward": e.ward,
+                    "district": e.district,
+                    "city": e.city,
+                    "address_type": e.addressType
+                  })
+              .toList(),
           "order_payment_type": paymentType,
           "order_items": orderItemList!
               .map((e) => {

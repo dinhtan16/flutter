@@ -112,18 +112,17 @@ class ReviewCartProvider with ChangeNotifier {
           })
         : [];
     if (shipping != 0) {
-      total = (total - shipping!);
+      total = (total + shipping!);
     } else {
       total = total;
     }
-    notifyListeners();
     return total.toStringAsFixed(0);
   }
 
 ////////////// ReviCartDeleteFunction ////////////
   Future<void> reviewCartDataDelete(cartId) async {
     try {
-      FirebaseFirestore.instance
+      var res = await FirebaseFirestore.instance
           .collection("ReviewCart")
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection("YourReviewCart")
@@ -135,12 +134,22 @@ class ReviewCartProvider with ChangeNotifier {
     }
   }
 
-  Future<void> deleteAllCart() async {
+  Future<void> deleteAllListCart() async {
     try {
-      await FirebaseFirestore.instance
+      QuerySnapshot res = await FirebaseFirestore.instance
           .collection("ReviewCart")
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .set({});
+          .collection("YourReviewCart")
+          .get();
+
+      res.docs.forEach((element) async {
+        await FirebaseFirestore.instance
+            .collection("ReviewCart")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection("YourReviewCart")
+            .doc(element.id)
+            .delete();
+      });
     } catch (e) {
       print("delete all cart failed : ${e}");
     }

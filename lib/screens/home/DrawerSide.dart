@@ -109,8 +109,8 @@ class _DrawerSideState extends State<DrawerSide> {
                   );
                 }),
             listTile(
-              icon: Icons.shopping_bag_rounded,
-              title: 'Giỏ hàng',
+              icon: Icons.receipt_long_outlined,
+              title: 'Đơn hàng của tôi',
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
