@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodorder_app/models/delivery_address_model.dart';
 import 'package:foodorder_app/models/review_cart_model.dart';
+import 'package:foodorder_app/screens/check-out/add_delivery_address/add_delivery_address.dart';
 import 'package:location/location.dart';
+import 'package:foodorder_app/config/id_generator.dart';
 
 class CheckoutProvider with ChangeNotifier {
   bool isloadding = false;
@@ -48,7 +50,7 @@ class CheckoutProvider with ChangeNotifier {
         "ward": ward.text,
         "district": district.text,
         "city": city.text,
-        "addressType": myType.toString(),
+        "addressType": myType == 'AddressTypes.Work' ? 'Công ty' : 'Nhà riêng',
         // "longitude": setLoaction!.longitude,
         // "latitude": setLoaction!.latitude,
       }).then((value) async {
@@ -98,34 +100,96 @@ class CheckoutProvider with ChangeNotifier {
   }
 
 ////// Order /////////
-
-  addPlaceOderData({
-    List<ReviewCartModel>? oderItemList,
-    var subTotal,
-    var address,
-    var shipping,
+  Future<void> addOderData({
+    List<ReviewCartModel>? orderItemList,
+    String? total,
+    List<DeliveryAddressModel>? orderInfo,
+    String? paymentType,
   }) async {
-    FirebaseFirestore.instance
-        .collection("Order")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("MyOrders")
-        .doc()
-        .set(
-      {
-        "subTotal": "1234",
-        "Shipping Charge": "",
-        "Discount": "10",
-        "orderItems": oderItemList!
-            .map((e) => {
-                  "orderTime": DateTime.now(),
-                  "orderImage": e.cartImage,
-                  "orderName": e.cartName,
-                  "orderUnit": e.cartUnit,
-                  "orderPrice": e.cartPrice,
-                  "orderQuantity": e.cartQuantity
-                })
-            .toList(),
-      },
-    );
+    try {
+      String idOrder = generateId(25);
+      await FirebaseFirestore.instance
+          .collection("Order")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("MyOrders")
+          .doc(idOrder)
+          .set(
+        {
+          "order_id": idOrder,
+          "order_at": DateTime.now(),
+          "order_info": orderInfo!.map((e) => {
+                "owner_order": e.fullname,
+                "street": e.street,
+                "ward": e.ward,
+                "district": e.district,
+                "city": e.city,
+                "address_type": e.addressType
+              }),
+          "order_payment_type": paymentType,
+          "order_items": orderItemList!
+              .map((e) => {
+                    "productName": e.cartName,
+                    "productImage": e.cartImage,
+                    "productPrice": e.cartPrice,
+                    "productQuantity": e.cartQuantity
+                  })
+              .toList(),
+        },
+      );
+    } catch (e) {
+      print("add order failed : ${e}");
+    }
   }
 }
+
+
+
+  // Future<List<Order>> getOrders() async {
+  //   try {
+  //     // Lấy tham chiếu đến bộ sưu tập orders của user hiện tại trên Firestore
+  //     Query ordersRef = FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(_auth.currentUser!.uid)
+  //         .collection('listOrders')
+  //         .orderBy('createAt', descending: true);
+
+  //     // Lấy dữ liệu từ Firestore
+  //     QuerySnapshot querySnapshot = await ordersRef.get();
+
+  //     // Lấy danh sách các tài liệu kết quả từ QuerySnapshot
+  //     List<QueryDocumentSnapshot> documents = querySnapshot.docs;
+  //     List<Order> orderList = [];
+
+  //     // Duyệt qua từng tài liệu để lấy thông tin của order
+  //     for (var document in documents) {
+  //       String orderId = document.id;
+  //       String orderName = document['name'];
+  //       double orderTotal = document['total'];
+  //       Timestamp createAt = document['createAt'];
+  //       List<dynamic> orderProducts = document['products'];
+
+  //       // Tạo một danh sách các sản phẩm của order
+  //       List<Products> products = orderProducts.map((productData) {
+  //         String productName = productData['title'];
+  //         int productPrice = productData['price'];
+  //         String productImage = productData["image"];
+  //         return Products(
+  //             title: productName, price: productPrice, image: productImage);
+  //       }).toList();
+
+  //       // Tạo một đối tượng Order chứa thông tin của order
+  //       Order orderData = Order(
+  //           name: orderName,
+  //           total: orderTotal,
+  //           products: products,
+  //           createAt: createAt);
+
+  //       orderList.add(orderData);
+  //     }
+
+  //     return orderList;
+  //   } catch (e) {
+  //     print('Lỗi khi lấy danh sách các order: $e');
+  //     return []; // Trả về danh sách rỗng nếu có lỗi
+  //   }
+  // }

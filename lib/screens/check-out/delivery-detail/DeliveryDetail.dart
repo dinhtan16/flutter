@@ -20,7 +20,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
     deliveryAddressProvider.getDeliveryAddressData();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Trở lại"),
+        title: Text("Chọn địa chỉ giao hàng"),
         backgroundColor: primaryColor,
       ),
       floatingActionButton: FloatingActionButton(
@@ -118,16 +118,15 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                   ),
                 )
               : Column(
-                  children: [
-                    SingleDeliveryItem(
-                      title: 'Thanh Hiếu',
-                      number: '0393297011',
-                      address:
-                          '828 sư vạn hạnh , phường 13 , quận 10 , thành phố Hồ Chí Minh',
-                      addressType: 'công ty',
-                    ),
-                  ],
-                )
+                  children: deliveryAddressProvider.getDeliveryAddressList
+                      .map((e) => SingleDeliveryItem(
+                            title: e.fullname,
+                            number: e.phone,
+                            address:
+                                "${e.street} ,Phường ${e.ward} , Quận ${e.district} , Thành phố ${e.city}",
+                            addressType: e.addressType,
+                          ))
+                      .toList())
         ],
       ),
     );

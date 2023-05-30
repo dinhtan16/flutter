@@ -101,17 +101,48 @@ class ReviewCartProvider with ChangeNotifier {
             total += int.parse(element.cartPrice!) * element.cartQuantity!;
           })
         : [];
-    return total;
+    return total.toStringAsFixed(0);
+  }
+
+  getTotalPaymentPrice({int? shipping}) {
+    double total = 0;
+    reviewCartDataList.length > 0
+        ? reviewCartDataList.forEach((element) {
+            total += int.parse(element.cartPrice!) * element.cartQuantity!;
+          })
+        : [];
+    if (shipping != 0) {
+      total = (total - shipping!);
+    } else {
+      total = total;
+    }
+    notifyListeners();
+    return total.toStringAsFixed(0);
   }
 
 ////////////// ReviCartDeleteFunction ////////////
-  reviewCartDataDelete(cartId) {
-    FirebaseFirestore.instance
-        .collection("ReviewCart")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("YourReviewCart")
-        .doc(cartId)
-        .delete();
-    notifyListeners();
+  Future<void> reviewCartDataDelete(cartId) async {
+    try {
+      FirebaseFirestore.instance
+          .collection("ReviewCart")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("YourReviewCart")
+          .doc(cartId)
+          .delete();
+      notifyListeners();
+    } catch (e) {
+      print("delete item in cart failed : ${e}");
+    }
+  }
+
+  Future<void> deleteAllCart() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("ReviewCart")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set({});
+    } catch (e) {
+      print("delete all cart failed : ${e}");
+    }
   }
 }

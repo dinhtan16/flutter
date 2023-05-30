@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodorder_app/config/colors.dart';
+import 'package:foodorder_app/config/id_generator.dart';
+import 'package:foodorder_app/providers/check_out_provider.dart';
+import 'package:foodorder_app/providers/review_cart_provider.dart';
 import 'package:foodorder_app/screens/check-out/payment/order_item.dart';
+import 'package:foodorder_app/screens/home/HomeScreen.dart';
+import 'package:provider/provider.dart';
 
 class Payment extends StatefulWidget {
   const Payment({super.key});
@@ -27,6 +33,11 @@ class _PaymentState extends State<Payment> {
 
   @override
   Widget build(BuildContext context) {
+    CheckoutProvider deliveryAddressProvider = Provider.of(context);
+    deliveryAddressProvider.getDeliveryAddressData();
+    ReviewCartProvider reviewCartProvider = Provider.of(context);
+    reviewCartProvider.getReviewCartData();
+    int shipping = 35000;
     return Scaffold(
         appBar: AppBar(
           title: Text('Chi tiết đặt hàng'),
@@ -37,7 +48,22 @@ class _PaymentState extends State<Payment> {
           // padding: EdgeInsets.all(20),
           padding: EdgeInsets.only(top: 0, right: 10, left: 10, bottom: 10),
           child: MaterialButton(
-            onPressed: () {},
+            onPressed: () async => {
+              await deliveryAddressProvider.addOderData(
+                  orderItemList: reviewCartProvider.getReviewCartDataList,
+                  total: reviewCartProvider.getTotalPaymentPrice(
+                      shipping: shipping),
+                  orderInfo: deliveryAddressProvider.getDeliveryAddressList,
+                  paymentType: myType.toString() == "PaymentTypes.Cod"
+                      ? "Cod"
+                      : "Banking"),
+              await reviewCartProvider.deleteAllCart(),
+              await Fluttertoast.showToast(
+                  msg: "Đặt hàng thành công", backgroundColor: Colors.green),
+              await Future.delayed(Duration(seconds: 1), () {
+                Navigator.pop(context);
+              })
+            },
             child: Text(
               'Hoàn tất đặt hàng',
               style: TextStyle(
@@ -54,68 +80,81 @@ class _PaymentState extends State<Payment> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              ListTile(
-                title: Text(
-                  'Thông tin nhận hàng',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                ),
-                subtitle: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'NguThanh Hiếu',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      '828 sư vạn hạnh , pphường 13 , quận 10 , thành phố hồ chí minh',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      '0393296011',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              Column(
+                children: deliveryAddressProvider.getDeliveryAddressList
+                    .map(
+                      (e) => ListTile(
+                        title: Text(
+                          'Thông tin nhận hàng',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w500),
+                        ),
+                        subtitle: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "Người nhận : ${e.fullname}",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              'Địa chỉ : ${e.street} , Phường ${e.ward} , Quận ${e.district} , ${e.city}',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              'Số điện thoại : ${e.phone}',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "${e.addressType}",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
+                            )
+                          ],
+                        ),
+                      ),
                     )
-                  ],
-                ),
+                    .toList(),
               ),
               ExpansionTile(
-                title: Text(
-                  'Chi tiết đơn hàng',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                ),
-                childrenPadding: EdgeInsets.only(bottom: 20),
-                children: [
-                  OrderItem(),
-                  SizedBox(
-                    height: 10,
+                  title: Text(
+                    'Chi tiết đơn hàng',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
-                  OrderItem(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  OrderItem(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  OrderItem(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  OrderItem(),
-                ],
-              ),
+                  childrenPadding: EdgeInsets.only(bottom: 20),
+                  children: reviewCartProvider.reviewCartDataList
+                      .map(
+                        (e) => OrderItem(
+                          name: e.cartName,
+                          quantity: e.cartQuantity.toString(),
+                          price: e.cartPrice,
+                          image: e.cartImage,
+                        ),
+                      )
+                      .toList()),
               ListTile(
                 minVerticalPadding: 5,
                 leading: Text(
@@ -123,7 +162,7 @@ class _PaymentState extends State<Payment> {
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                 ),
                 trailing: Text(
-                  '200.000đ',
+                  "${reviewCartProvider.getTotalPrice()}đ",
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -136,7 +175,7 @@ class _PaymentState extends State<Payment> {
                     style:
                         TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
                 trailing: Text(
-                  '20.000đ',
+                  "${shipping}đ",
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -161,7 +200,8 @@ class _PaymentState extends State<Payment> {
                 leading: Text('Tổng tiền',
                     style:
                         TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
-                trailing: Text('200.000đ',
+                trailing: Text(
+                    "${reviewCartProvider.getTotalPaymentPrice(shipping: shipping)}đ",
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
               ),
