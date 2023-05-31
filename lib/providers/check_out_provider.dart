@@ -116,7 +116,10 @@ class CheckoutProvider with ChangeNotifier {
           .set(
         {
           "order_id": idOrder,
-          "order_at": DateTime.now(),
+          "is_delivery": false,
+          "order_at": Timestamp.now(),
+          "order_total": total,
+          "order_payment_type": paymentType,
           "order_info": orderInfo!
               .map((e) => {
                     "owner_order": e.fullname,
@@ -128,7 +131,6 @@ class CheckoutProvider with ChangeNotifier {
                     "address_type": e.addressType
                   })
               .toList(),
-          "order_payment_type": paymentType,
           "order_items": orderItemList!
               .map((e) => {
                     "productName": e.cartName,

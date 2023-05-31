@@ -43,12 +43,11 @@ class UserProvider with ChangeNotifier {
         userUid: value.get("userUid"),
       );
       currentData = userModel;
-      notifyListeners();
+      // notifyListeners();
     }
   }
 
   UserModel get currentUserData {
-    print(currentData);
     return currentData!;
   }
 }

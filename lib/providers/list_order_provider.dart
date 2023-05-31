@@ -4,24 +4,58 @@ import 'package:flutter/material.dart';
 import 'package:foodorder_app/models/order_model.dart';
 
 class ListOrderProvider with ChangeNotifier {
+  OrderModel? orderModel;
+  orderModels(QueryDocumentSnapshot element) {
+    orderModel = OrderModel(
+        // order_id: element.data().toString().contains('order_id')
+        //     ? element.get('order_id')
+        //     : '',
+        // order_create_at: element.data().toString().contains('order_at')
+        //     ? element.get('order_at')
+        //     : '',
+        // list_order_item: element.data().toString().contains('order_items')
+        //     ? element.get('order_items')
+        //     : '',
+        // total: element.data().toString().contains('order_total')
+        //     ? element.get('total')
+        //     : '',
+        // is_delivery: element.data().toString().contains('is_delivery')
+        //     ? element.get('is_delivery')
+        //     : '',
+        // order_payment_type:
+        //     element.data().toString().contains('order_payment_type')
+        //         ? element.get('order_payment_type')
+        //         : ''
+
+        order_id: element.get("order_id"),
+        order_create_at: element.get("order_at"),
+        list_order_item: element.get("order_items"),
+        total: element.get('order_total'),
+        is_delivery: element.get('is_delivery'),
+        order_payment_type: element.get('order_payment_type'),
+        order_info: element.get('order_info'));
+  }
+
   List<OrderModel> listOrder = [];
   getListOrderData() async {
-    List<OrderModel> newList = [];
-    OrderModel orderModel;
-    DocumentSnapshot _db = await FirebaseFirestore.instance
-        .collection("MyOrders")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    if (_db.exists) {
-      orderModel = OrderModel(
-        list_order_item: _db.get("orderItems"),
-      );
-      newList.add(orderModel);
-      notifyListeners();
+    try {
+      List<OrderModel> newList = [];
+      QuerySnapshot result = await FirebaseFirestore.instance
+          .collection("Order")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("MyOrders")
+          .get();
+      result.docs.forEach((element) {
+        orderModels(element);
+        newList.add(orderModel!);
+      });
+      listOrder = newList;
+      await Future.delayed(Duration(seconds: 30), () {
+        // notifyListeners();
+      });
+    } catch (e) {
+      print("get list order failed : ${e}");
     }
-
-    listOrder = newList;
-    notifyListeners();
   }
 
   List<OrderModel> get getListOrder {

@@ -22,7 +22,6 @@ class ProductProvider with ChangeNotifier {
           ? element.get('productDes')
           : '',
     );
-    print(productModel);
     search.add(productModel!);
   }
 

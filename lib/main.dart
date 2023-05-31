@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foodorder_app/auth/SignIn.dart';
 import 'package:foodorder_app/providers/check_out_provider.dart';
+import 'package:foodorder_app/providers/list_order_provider.dart';
 import 'package:foodorder_app/providers/product_provider.dart';
 import 'package:foodorder_app/providers/review_cart_provider.dart';
 import 'package:foodorder_app/providers/user_provider.dart';
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<CheckoutProvider>(
           create: (context) => CheckoutProvider(),
+        ),
+        ChangeNotifierProvider<ListOrderProvider>(
+          create: (context) => ListOrderProvider(),
         ),
       ],
       child: MaterialApp(

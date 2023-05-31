@@ -59,15 +59,15 @@ class _PaymentState extends State<Payment> {
                   if (myType != PaymentTypes.Banking)
                     {
                       await deliveryAddressProvider.addOderData(
-                          orderItemList:
-                              reviewCartProvider.getReviewCartDataList,
-                          total: reviewCartProvider.getTotalPaymentPrice(
-                              shipping: shipping!),
-                          orderInfo:
-                              deliveryAddressProvider.getDeliveryAddressList,
-                          paymentType: myType.toString() == "PaymentTypes.Cod"
-                              ? "Cod"
-                              : "Banking"),
+                        orderItemList: reviewCartProvider.getReviewCartDataList,
+                        total: reviewCartProvider.getTotalPaymentPrice(
+                            shipping: shipping!),
+                        orderInfo:
+                            deliveryAddressProvider.getDeliveryAddressList,
+                        paymentType: myType.toString() == "PaymentTypes.Cod"
+                            ? "Cod"
+                            : "Banking",
+                      ),
                       await Future.delayed(Duration(seconds: 1), () async {
                         // Fluttertoast.showToast(
                         //     msg: "Đặt hàng thành công",
