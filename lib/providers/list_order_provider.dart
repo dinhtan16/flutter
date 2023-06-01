@@ -24,15 +24,15 @@ class ListOrderProvider with ChangeNotifier {
           .collection("Order")
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection("MyOrders")
+          .orderBy("order_at", descending: true)
           .get();
       result.docs.forEach((element) {
         orderModels(element);
         newList.add(orderModel!);
       });
       listOrder = newList;
-      await Future.delayed(Duration(seconds: 30), () {
-        // notifyListeners();
-      });
+
+      notifyListeners();
     } catch (e) {
       print("get list order failed : ${e}");
     }
@@ -40,5 +40,19 @@ class ListOrderProvider with ChangeNotifier {
 
   List<OrderModel> get getListOrder {
     return listOrder;
+  }
+
+  Future<void> cancelOrder(orderId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Order")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("MyOrders")
+          .doc(orderId)
+          .update({"is_delivery": false});
+      notifyListeners();
+    } catch (e) {
+      print("cancel order failed : ${e}");
+    }
   }
 }

@@ -127,7 +127,8 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                                 "${e.street} ,Phường ${e.ward} , Quận ${e.district} , Thành phố ${e.city}",
                             addressType: e.addressType,
                           ))
-                      .toList())
+                      .toList(),
+                )
         ],
       ),
     );

@@ -114,7 +114,7 @@ class CheckoutProvider with ChangeNotifier {
           .set(
         {
           "order_id": idOrder,
-          "is_delivery": false,
+          "is_delivery": true,
           "order_at": Timestamp.now(),
           "order_total": total,
           "order_payment_type": paymentType,
