@@ -10,7 +10,6 @@ import 'package:foodorder_app/providers/check_out_provider.dart';
 import 'package:foodorder_app/providers/review_cart_provider.dart';
 import 'package:foodorder_app/screens/ReviewCart/ListCart.dart';
 import 'package:foodorder_app/screens/check-out/payment/order_item.dart';
-import 'package:foodorder_app/screens/check-out/payment/zalo_payment.dart';
 import 'package:foodorder_app/screens/home/HomeScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -136,11 +135,7 @@ class _PaymentState extends State<Payment> {
                     {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => Dashboard(
-                                  title: "Thanh toán với Zalo Pay",
-                                  version: "",
-                                )),
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
                       ),
                     }
                 },
@@ -161,7 +156,7 @@ class _PaymentState extends State<Payment> {
         child: Column(
           children: [
             Column(
-              children: deliveryAddressProvider.getDeliveryAddressList
+              children: deliveryAddressProvider!.getDeliveryAddressList
                   .map(
                     (e) => ListTile(
                       title: Text(

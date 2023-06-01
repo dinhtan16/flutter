@@ -1,4 +1,5 @@
 class DeliveryAddressModel {
+  String? address_id;
   String? fullname;
   String? phone;
   String? street;
@@ -8,7 +9,8 @@ class DeliveryAddressModel {
   String? addressType;
 
   DeliveryAddressModel(
-      {this.fullname,
+      {this.address_id,
+      this.fullname,
       this.phone,
       this.street,
       this.ward,

@@ -12,18 +12,21 @@ class ListOrderItem extends StatelessWidget {
   List<dynamic>? list_order;
   bool? order_status;
   Timestamp? order_at;
+  Function? onTab;
   ListOrderItem(
-      {this.order_id, this.list_order, this.order_status, this.order_at});
+      {this.order_id,
+      this.list_order,
+      this.order_status,
+      this.order_at,
+      this.onTab});
   @override
   Widget build(BuildContext context) {
-    int ts = 1638592424384;
-    DateTime tsdate =
-        DateTime.fromMillisecondsSinceEpoch(order_at!.nanoseconds);
-    String fdatetime = DateFormat('dd-MMM-yyy')
-        .format(tsdate); //DateFormat() is from intl package
+    final date = DateTime.fromMillisecondsSinceEpoch(
+        order_at!.seconds * 1000 + (order_at!.nanoseconds / 1000000).round());
+    final formattedDate = DateFormat('dd-MM-yyyy HH:mm:ss').format(date);
     return GestureDetector(
       onTap: () {
-        print(order_id);
+        print(list_order);
       },
       child: Container(
         margin: EdgeInsets.only(top: 15),
@@ -35,18 +38,26 @@ class ListOrderItem extends StatelessWidget {
           leading: Image.network(
             'https://foodcoin-app.com/wp-content/uploads/2021/06/Logo-Foodcoin.png',
             width: 50,
-            fit: BoxFit.cover,
+            color: primaryColor,
+            fit: BoxFit.contain,
+            height: 50,
+            alignment: Alignment.center,
           ),
           title: Text(
             "Đơn hàng : ${order_id!}",
             maxLines: 1,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
-          subtitle: Text(fdatetime.toString()),
+          subtitle: Text(formattedDate),
           trailing: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            width: 75,
+            alignment: Alignment.center,
+            height: 30,
+            // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: order_status == false ? primaryColor : Colors.red,
+              color: order_status == false
+                  ? primaryColor
+                  : Color.fromARGB(255, 198, 13, 0),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(

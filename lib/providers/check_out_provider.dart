@@ -21,6 +21,7 @@ class CheckoutProvider with ChangeNotifier {
   LocationData? setLoaction;
 
   void validator(context, myType) async {
+    var idRef = generateId(20);
     if (fullname.text.isEmpty) {
       Fluttertoast.showToast(msg: "Fullname is not empty");
     } else if (phone.text.isEmpty) {
@@ -38,59 +39,56 @@ class CheckoutProvider with ChangeNotifier {
     //   Fluttertoast.showToast(msg: "setLoaction is empty");
     // }
     else {
-      isloadding = true;
-      notifyListeners();
       await FirebaseFirestore.instance
           .collection("AddDeliverAddress")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .doc(idRef)
           .set({
+        "address_id": idRef,
         "fullname": fullname.text,
         "phone": phone.text,
         "street": street.text,
         "ward": ward.text,
         "district": district.text,
         "city": city.text,
-        "addressType": myType == 'AddressTypes.Work' ? 'Công ty' : 'Nhà riêng',
+        "addressType": myType == AddressTypes.Work ? 'Công ty' : 'Nhà riêng',
         // "longitude": setLoaction!.longitude,
         // "latitude": setLoaction!.latitude,
       }).then((value) async {
-        notifyListeners();
         await Future.delayed(Duration(seconds: 1), () {
-          isloadding = true;
           Fluttertoast.showToast(
               msg: "Thêm địa chỉ mới thành công",
               backgroundColor: Colors.green);
         });
-        Navigator.of(context).pop();
-
         notifyListeners();
+
+        Navigator.of(context).pop();
       });
       notifyListeners();
     }
   }
 
+  DeliveryAddressModel? deliveryAddressModel;
+  deliveryAddressModels(QueryDocumentSnapshot element) {
+    deliveryAddressModel = DeliveryAddressModel(
+        address_id: element.get("address_id"),
+        fullname: element.get("fullname"),
+        phone: element.get("phone"),
+        street: element.get("street"),
+        ward: element.get('ward'),
+        district: element.get('district'),
+        city: element.get('city'),
+        addressType: element.get('addressType'));
+  }
+
   List<DeliveryAddressModel> deliveryAdressList = [];
   getDeliveryAddressData() async {
     List<DeliveryAddressModel> newList = [];
-    DeliveryAddressModel deliveryAddressModel;
-    DocumentSnapshot _db = await FirebaseFirestore.instance
-        .collection("AddDeliverAddress")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    if (_db.exists) {
-      deliveryAddressModel = DeliveryAddressModel(
-        fullname: _db.get("fullname"),
-        phone: _db.get("phone"),
-        street: _db.get("street"),
-        ward: _db.get("ward"),
-        district: _db.get("district"),
-        city: _db.get("city"),
-        addressType: _db.get("addressType"),
-      );
-      newList.add(deliveryAddressModel);
-      notifyListeners();
-    }
-
+    QuerySnapshot result =
+        await FirebaseFirestore.instance.collection("AddDeliverAddress").get();
+    result.docs.forEach((element) {
+      deliveryAddressModels(element);
+      newList.add(deliveryAddressModel!);
+    });
     deliveryAdressList = newList;
     notifyListeners();
   }

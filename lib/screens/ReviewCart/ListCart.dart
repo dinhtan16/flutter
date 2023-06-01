@@ -1,3 +1,4 @@
+import 'package:currency_formatter/currency_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodorder_app/models/review_cart_model.dart';
@@ -49,37 +50,71 @@ class ListCart extends StatelessWidget {
   Widget build(BuildContext context) {
     reviewCartProvider = Provider.of<ReviewCartProvider>(context);
     reviewCartProvider?.getReviewCartData();
+    CurrencyFormatterSettings currencySettings = CurrencyFormatterSettings(
+      symbol: 'đ',
+      symbolSide: SymbolSide.right,
+      thousandSeparator: '.',
+      decimalSeparator: ',',
+      symbolSeparator: ' ',
+    );
 
+    // var priceNumber = 0;
+    // try {
+    //   int nums = int.parse(widget.productPrice!);
+    //   priceNumber = nums;
+    // } catch (e) {
+    //   print('Chuỗi không thể chuyển đổi thành số: $e');
+    // }
+    String formattedPrice = CurrencyFormatter.format(
+        reviewCartProvider?.getTotalPrice(), currencySettings);
     return Scaffold(
       bottomNavigationBar: reviewCartProvider?.getReviewCartDataList.length != 0
           ? ListTile(
               title: Text(
                 'Tổng tiền:',
                 style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 19,
-                    fontWeight: FontWeight.w600),
+                    color: Color.fromARGB(255, 39, 39, 39),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500),
               ),
               subtitle: Container(
                 margin: EdgeInsets.only(top: 10),
                 child: Text(
-                  "\ ${reviewCartProvider?.getTotalPrice()}VND",
+                  "${formattedPrice}",
                   style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 24,
                       color: Color.fromRGBO(223, 46, 56, 1),
                       fontWeight: FontWeight.bold),
                 ),
               ),
               trailing: Container(
                 child: MaterialButton(
-                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-                    child: Text(
-                      'Thanh toán',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    // padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                    child: Container(
+                        width: 150,
+                        height: 80,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                                child: Text(
+                              'Thanh toán',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
+                            )),
+                            Icon(
+                              Icons.navigate_next,
+                              size: 33,
+                              weight: 20,
+                              color: Color.fromARGB(255, 255, 255, 255),
+                            )
+                          ],
+                        )),
                     color: Color.fromRGBO(2, 134, 17, 1),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30)),
@@ -92,7 +127,7 @@ class ListCart extends StatelessWidget {
                     }),
               ),
               contentPadding:
-                  EdgeInsets.only(top: 15, bottom: 40, right: 20, left: 20),
+                  EdgeInsets.only(top: 15, bottom: 20, right: 20, left: 20),
             )
           : SizedBox(
               width: 0,

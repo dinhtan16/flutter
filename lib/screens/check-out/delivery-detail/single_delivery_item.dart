@@ -13,9 +13,11 @@ class SingleDeliveryItem extends StatelessWidget {
       children: [
         SizedBox(height: 10),
         ListTile(
-          leading: CircleAvatar(
-            radius: 8,
-            backgroundColor: primaryColor,
+          leading: Checkbox(
+            checkColor: Colors.white,
+            // fillColor: Colors.black,
+            value: false,
+            onChanged: (bool? value) {},
           ),
           title: Text(
             title!,

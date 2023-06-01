@@ -18,6 +18,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
   Widget build(BuildContext context) {
     CheckoutProvider deliveryAddressProvider = Provider.of(context);
     deliveryAddressProvider.getDeliveryAddressData();
+    // print(deliveryAddressProvider.getDeliveryAddressList);
     return Scaffold(
       appBar: AppBar(
         title: Text("Chọn địa chỉ giao hàng"),

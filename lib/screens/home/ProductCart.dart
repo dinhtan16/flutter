@@ -41,15 +41,15 @@ class _ProductCartState extends State<ProductCart> {
       symbolSeparator: ' ',
     );
 
-    var priceNumber = 0;
-    try {
-      int nums = int.parse(widget.productPrice!);
-      priceNumber = nums;
-    } catch (e) {
-      print('Chuỗi không thể chuyển đổi thành số: $e');
-    }
+    // var priceNumber = 0;
+    // try {
+    //   int nums = int.parse(widget.productPrice!);
+    //   priceNumber = nums;
+    // } catch (e) {
+    //   print('Chuỗi không thể chuyển đổi thành số: $e');
+    // }
     String formattedPrice =
-        CurrencyFormatter.format(priceNumber, currencySettings);
+        CurrencyFormatter.format(widget.productPrice!, currencySettings);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(children: [
@@ -89,7 +89,7 @@ class _ProductCartState extends State<ProductCart> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10, left: 10),
                     child: Text(
-                      formattedPrice ?? '',
+                      formattedPrice,
                       style: TextStyle(fontSize: 13, color: Colors.grey[700]),
                     ),
                   ),
