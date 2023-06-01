@@ -47,7 +47,7 @@ dependencies:
     currency_formatter: ^2.0.0
     flutter_polyline_points: ^1.0.0
     flutter_map: ^0.14.0
-    flutter_local_notifications: ^14.1.1
+    flutter_local_notifications: ^13.0.0
 dev_dependencies:
     flutter_test:
         sdk: flutter

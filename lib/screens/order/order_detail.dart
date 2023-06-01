@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodorder_app/config/colors.dart';
 import 'package:foodorder_app/providers/list_order_provider.dart';
+import 'package:foodorder_app/screens/notificate/NotificationService.dart';
 import 'package:foodorder_app/screens/order/list_order.dart';
 import 'package:foodorder_app/screens/order/map.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class OrderDetail extends StatelessWidget {
   static String routeName = "/OrderDetail";
   @override
   Widget build(BuildContext context) {
+    NotificationServices notificationServices = NotificationServices();
     var listOrderProvider = Provider.of<ListOrderProvider>(context);
     var convertAdd = info_address!.elementAt(0);
     var formatAddress =
@@ -75,11 +77,7 @@ class OrderDetail extends StatelessWidget {
                               msg: "Hủy đơn hàng thành công",
                               backgroundColor: primaryColor,
                             ),
-                            // Navigator.pushNamedAndRemoveUntil(
-                            //     context,
-                            //     "/ListOrder",
-                            //     ModalRoute.withName("/OrderDetail")),
-                            Navigator.pop(context)
+                            Navigator.pop(context),
                           },
                           child: const Text(
                             'Đồng ý',

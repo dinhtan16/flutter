@@ -11,6 +11,8 @@ import 'package:foodorder_app/providers/review_cart_provider.dart';
 import 'package:foodorder_app/screens/ReviewCart/ListCart.dart';
 import 'package:foodorder_app/screens/check-out/payment/order_item.dart';
 import 'package:foodorder_app/screens/home/HomeScreen.dart';
+import 'package:foodorder_app/screens/notificate/NotificationService.dart';
+import 'package:foodorder_app/screens/order/list_order.dart';
 import 'package:provider/provider.dart';
 
 class Payment extends StatefulWidget {
@@ -27,15 +29,18 @@ enum PaymentTypes {
 
 class _PaymentState extends State<Payment> {
   var myType;
+  bool? loading;
   int? shipping;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     myType = PaymentTypes.Cod;
+    loading = false;
     shipping = 30000;
   }
 
+  static String routeName = '/Payment';
   @override
   Widget build(BuildContext context) {
     CheckoutProvider deliveryAddressProvider = Provider.of(context);
@@ -43,11 +48,14 @@ class _PaymentState extends State<Payment> {
     ReviewCartProvider reviewCartProvider = Provider.of(context);
     reviewCartProvider.getReviewCartData();
     return Scaffold(
+      backgroundColor:
+          loading == true ? Color.fromARGB(255, 206, 206, 206) : null,
       appBar: AppBar(
         title: Text('Chi tiết đặt hàng'),
         backgroundColor: primaryColor,
       ),
-      bottomNavigationBar: reviewCartProvider.getReviewCartDataList.isEmpty
+      bottomNavigationBar: reviewCartProvider.getReviewCartDataList.isEmpty ||
+              loading == true
           ? null
           : Container(
               height: 60,
@@ -57,6 +65,9 @@ class _PaymentState extends State<Payment> {
                 onPressed: () async => {
                   if (myType != PaymentTypes.Banking)
                     {
+                      setState(() {
+                        loading = true;
+                      }),
                       await deliveryAddressProvider.addOderData(
                         orderItemList: reviewCartProvider.getReviewCartDataList,
                         total: reviewCartProvider.getTotalPaymentPrice(
@@ -67,77 +78,29 @@ class _PaymentState extends State<Payment> {
                             ? "Cod"
                             : "Banking",
                       ),
-                      await Future.delayed(Duration(seconds: 1), () async {
-                        // Fluttertoast.showToast(
-                        //     msg: "Đặt hàng thành công",
-                        //     backgroundColor: Colors.green);
-                        await reviewCartProvider.deleteAllListCart();
-                        await showDialog(
-                            context: context,
-                            builder: (BuildContextcontext) => AlertDialog(
-                                  title: Text('Đặt hàng thành công'),
-                                  content: Container(
-                                    height: 100,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Chúng tôi sẽ kiểm tra đơn hàng của bạn trong thời gian sớm nhất. Cảm ơn bạn đã đặt hàng !',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500,
-                                            color:
-                                                Color.fromARGB(255, 60, 60, 60),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          'Bạn có muốn đặt thêm không?',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500,
-                                            color:
-                                                Color.fromARGB(255, 60, 60, 60),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => HomeScreen()),
-                                      ),
-                                      child: Text('Có'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        // Navigator.popUntil(
-                                        //     context, ModalRoute.withName('/cart'));
-                                      },
-                                      child: Text('Hủy'),
-                                    ),
-                                  ],
-                                ));
-                      }),
+                      await reviewCartProvider.deleteAllListCart(),
+                      await Future.delayed(
+                        Duration(seconds: 2),
+                        () async {
+                          Fluttertoast.showToast(
+                              msg: "Đặt hàng thành công",
+                              backgroundColor: Colors.green);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()),
+                          );
+                          setState(() {
+                            loading = false;
+                          });
+                        },
+                      ),
                       setState(() {
                         shipping = 0;
                       })
                     }
                   else
-                    {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
-                      ),
-                    }
+                    {}
                 },
                 child: Text(
                   'Hoàn tất đặt hàng',
@@ -152,162 +115,233 @@ class _PaymentState extends State<Payment> {
                 ),
               ),
             ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Column(
-              children: deliveryAddressProvider!.getDeliveryAddressList
-                  .map(
-                    (e) => ListTile(
-                      title: Text(
-                        'Thông tin nhận hàng',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w500),
-                      ),
-                      subtitle: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "Người nhận : ${e.fullname}",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            'Địa chỉ : ${e.street} , Phường ${e.ward} , Quận ${e.district} , ${e.city}',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            'Số điện thoại : ${e.phone}',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "${e.addressType}",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-            ExpansionTile(
-                title: Text(
-                  'Chi tiết đơn hàng',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                ),
-                childrenPadding: EdgeInsets.only(bottom: 20),
-                children: reviewCartProvider.reviewCartDataList
-                    .map(
-                      (e) => OrderItem(
-                        name: e.cartName,
-                        quantity: e.cartQuantity.toString(),
-                        price: e.cartPrice,
-                        image: e.cartImage,
-                      ),
-                    )
-                    .toList()),
-            ListTile(
-              minVerticalPadding: 5,
-              leading: Text(
-                'Tạm tính',
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+      body: loading == true
+          ? Center(
+              child: CircularProgressIndicator(
+                color: primaryColor,
+                backgroundColor: Colors.amber,
+                strokeWidth: 5.0,
               ),
-              trailing: Text(
-                "${reviewCartProvider.getTotalPrice()}đ",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromARGB(255, 86, 86, 86)),
-              ),
-            ),
-            ListTile(
-              minVerticalPadding: 5,
-              leading: Text('Phí vận chuyển',
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
-              trailing: Text(
-                "${shipping}đ",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromARGB(255, 86, 86, 86)),
-              ),
-            ),
-            ListTile(
-              minVerticalPadding: 5,
-              leading: Text('Khuyến mãi',
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
-              trailing: Text(
-                '0đ',
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromARGB(255, 86, 86, 86)),
-              ),
-            ),
-            ListTile(
-              minVerticalPadding: 5,
-              leading: Text('Tổng tiền',
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
-              trailing: Text(
-                  "${reviewCartProvider.getTotalPaymentPrice(shipping: shipping)}đ",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-            ),
-            Divider(),
-            ListTile(
-              leading: Text(
-                'Chọn phương thức thanh toán',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              ),
-            ),
-            RadioListTile(
-              activeColor: primaryColor,
-              title: Text('Thanh toán khi nhận hàng'),
-              value: PaymentTypes.Cod,
-              groupValue: myType,
-              onChanged: (value) {
-                setState(() {
-                  myType = value;
-                });
-              },
-            ),
-            RadioListTile(
-              activeColor: primaryColor,
-              title: Text('Chuyển khoản'),
-              value: PaymentTypes.Banking,
-              groupValue: myType,
-              onChanged: (value) {
-                setState(() {
-                  myType = value;
-                });
-              },
             )
-          ],
-        ),
-      ),
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    children: deliveryAddressProvider!.getDeliveryAddressList
+                        .map(
+                          (e) => ListTile(
+                            title: Text(
+                              'Thông tin nhận hàng',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w500),
+                            ),
+                            subtitle: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "Người nhận : ${e.fullname}",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  'Địa chỉ : ${e.street} , Phường ${e.ward} , Quận ${e.district} , ${e.city}',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  'Số điện thoại : ${e.phone}',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "${e.addressType}",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  ExpansionTile(
+                      title: Text(
+                        'Chi tiết đơn hàng',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ),
+                      childrenPadding: EdgeInsets.only(bottom: 20),
+                      children: reviewCartProvider.reviewCartDataList
+                          .map(
+                            (e) => OrderItem(
+                              name: e.cartName,
+                              quantity: e.cartQuantity.toString(),
+                              price: e.cartPrice,
+                              image: e.cartImage,
+                            ),
+                          )
+                          .toList()),
+                  ListTile(
+                    minVerticalPadding: 5,
+                    leading: Text(
+                      'Tạm tính',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                    ),
+                    trailing: Text(
+                      "${reviewCartProvider.getTotalPrice()}đ",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 86, 86, 86)),
+                    ),
+                  ),
+                  ListTile(
+                    minVerticalPadding: 5,
+                    leading: Text('Phí vận chuyển',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16)),
+                    trailing: Text(
+                      "${shipping}đ",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 86, 86, 86)),
+                    ),
+                  ),
+                  ListTile(
+                    minVerticalPadding: 5,
+                    leading: Text('Khuyến mãi',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16)),
+                    trailing: Text(
+                      '0đ',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 86, 86, 86)),
+                    ),
+                  ),
+                  ListTile(
+                    minVerticalPadding: 5,
+                    leading: Text('Tổng tiền',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16)),
+                    trailing: Text(
+                        "${reviewCartProvider.getTotalPaymentPrice(shipping: shipping)}đ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20)),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Text(
+                      'Chọn phương thức thanh toán',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  RadioListTile(
+                    activeColor: primaryColor,
+                    title: Text('Thanh toán khi nhận hàng'),
+                    value: PaymentTypes.Cod,
+                    groupValue: myType,
+                    onChanged: (value) {
+                      setState(() {
+                        myType = value;
+                      });
+                    },
+                  ),
+                  RadioListTile(
+                    activeColor: primaryColor,
+                    title: Text('Chuyển khoản'),
+                    value: PaymentTypes.Banking,
+                    groupValue: myType,
+                    onChanged: (value) {
+                      setState(() {
+                        myType = value;
+                      });
+                    },
+                  )
+                ],
+              ),
+            ),
     );
   }
 }
+
+
+ // await showDialog(
+                          //     context: context,
+                          //     builder: (BuildContextcontext) => AlertDialog(
+                          //           title: Text('Đặt hàng thành công'),
+                          //           content: Container(
+                          //             height: 100,
+                          //             child: Column(
+                          //               crossAxisAlignment:
+                          //                   CrossAxisAlignment.start,
+                          //               mainAxisAlignment:
+                          //                   MainAxisAlignment.start,
+                          //               children: [
+                          //                 Text(
+                          //                   'Chúng tôi sẽ kiểm tra đơn hàng của bạn trong thời gian sớm nhất. Cảm ơn bạn đã đặt hàng !',
+                          //                   style: TextStyle(
+                          //                     fontSize: 18,
+                          //                     fontWeight: FontWeight.w500,
+                          //                     color:
+                          //                         Color.fromARGB(255, 60, 60, 60),
+                          //                   ),
+                          //                 ),
+                          //                 SizedBox(
+                          //                   height: 10,
+                          //                 ),
+                          //                 Text(
+                          //                   'Bạn có muốn đặt thêm không?',
+                          //                   style: TextStyle(
+                          //                     fontSize: 18,
+                          //                     fontWeight: FontWeight.w500,
+                          //                     color:
+                          //                         Color.fromARGB(255, 60, 60, 60),
+                          //                   ),
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //           actions: <Widget>[
+                          //             TextButton(
+                          //               onPressed: () => Navigator.push(
+                          //                 context,
+                          //                 MaterialPageRoute(
+                          //                     builder: (context) => HomeScreen()),
+                          //               ),
+                          //               child: Text('Có'),
+                          //             ),
+                          //             TextButton(
+                          //               onPressed: () {
+                          //                 // Navigator.popUntil(
+                          //                 //     context, ModalRoute.withName('/cart'));
+                          //               },
+                          //               child: Text('Hủy'),
+                          //             ),
+                          //           ],
+                          //         ));

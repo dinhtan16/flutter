@@ -16,7 +16,7 @@ class SingleDeliveryItem extends StatelessWidget {
           leading: Checkbox(
             checkColor: Colors.white,
             // fillColor: Colors.black,
-            value: false,
+            value: true,
             onChanged: (bool? value) {},
           ),
           title: Text(

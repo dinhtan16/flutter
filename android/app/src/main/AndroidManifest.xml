@@ -32,14 +32,6 @@
             android:name="flutterEmbedding"
             android:value="2" />
              
-       <meta-data
-                    android:name="com.vng.zalo.sdk.APP_ID"
-                    android:value="2553" />
-        <meta-data
-                    android:name="com.vng.zalo.sdk.URI_SCHEME"
-                    android:value="demozpdk://app" />
-        <meta-data
-                    android:name="com.vng.zalo.sdk.ENVIRONMENT"
-                    android:value="SANDBOX" /> // OR value="PRODUCTION" 
+    
     </application>
 </manifest>

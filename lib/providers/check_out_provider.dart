@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodorder_app/models/delivery_address_model.dart';
 import 'package:foodorder_app/models/review_cart_model.dart';
 import 'package:foodorder_app/screens/check-out/add_delivery_address/add_delivery_address.dart';
+import 'package:foodorder_app/screens/notificate/NotificationService.dart';
 import 'package:location/location.dart';
 import 'package:foodorder_app/config/id_generator.dart';
 
@@ -137,6 +138,15 @@ class CheckoutProvider with ChangeNotifier {
                     "productQuantity": e.cartQuantity
                   })
               .toList(),
+        },
+      );
+      Future.delayed(
+        Duration(seconds: 5),
+        () {
+          NotificationServices().sendNotification(
+              "Bạn vừa đặt thành công đơn hàng !",
+              "#${idOrder}",
+              "Payload data");
         },
       );
     } catch (e) {

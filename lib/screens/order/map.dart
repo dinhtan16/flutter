@@ -41,31 +41,29 @@ class _MapScreenState extends State<MapScreen> {
           MarkerLayerOptions(
             markers: [
               Marker(
-                  width: 50,
-                  height: 50,
-                  point: points[0], // Điểm đầu tiên
-                  builder: (ctx) => Stack(
-                        children: [
-                          // Icon(
-                          //   Icons.location_pin,
-                          //   color: Colors.red,
-                          //   size: 50,
-                          // ),
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(shape: BoxShape.circle),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: Image(
-                                image: NetworkImage(
-                                    'https://www.tutorialkart.com/img/hummingbird.png'),
-                              ),
-                            ),
-                          )
-                        ],
-                        alignment: Alignment.center,
-                      )),
+                width: 50,
+                height: 50,
+                point: points[0], // Điểm đầu tiên
+                builder: (ctx) => Stack(
+                  children: [
+                    // Icon(
+                    //   Icons.location_pin,
+                    //   color: Colors.red,
+                    //   size: 50,
+                    // ),
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(shape: BoxShape.circle),
+                      child: CircleAvatar(
+                        backgroundImage: AssetImage('assets/avatar.jpg'),
+                        radius: 220,
+                      ),
+                    ),
+                  ],
+                  alignment: Alignment.topCenter,
+                ),
+              ),
               Marker(
                 width: 50,
                 height: 50,

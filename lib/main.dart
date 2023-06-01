@@ -7,6 +7,7 @@ import 'package:foodorder_app/providers/product_provider.dart';
 import 'package:foodorder_app/providers/review_cart_provider.dart';
 import 'package:foodorder_app/providers/user_provider.dart';
 import 'package:foodorder_app/providers/wishlist_provider.dart';
+import 'package:foodorder_app/screens/notificate/NotificationService.dart';
 import 'package:foodorder_app/screens/notificate/Notifications.dart';
 import 'package:foodorder_app/screens/profile/Profile.dart';
 import 'package:foodorder_app/screens/home/HomeScreen.dart';
@@ -21,6 +22,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  NotificationServices().inititaliseNotifications();
   runApp(const MyApp());
 }
 
