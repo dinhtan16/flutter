@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodorder_app/models/delivery_address_model.dart';
 import 'package:foodorder_app/models/review_cart_model.dart';
 import 'package:foodorder_app/screens/check-out/add_delivery_address/add_delivery_address.dart';
+import 'package:foodorder_app/screens/check-out/delivery-detail/single_delivery_item.dart';
 import 'package:foodorder_app/screens/notificate/NotificationService.dart';
 import 'package:location/location.dart';
 import 'package:foodorder_app/config/id_generator.dart';
@@ -153,4 +154,55 @@ class CheckoutProvider with ChangeNotifier {
       print("add order failed : ${e}");
     }
   }
+
+  DeliveryAddressModel? selectedAddress;
+  Future<void> setSelectedAddress(id_add) async {
+    List<DeliveryAddressModel> newList = [];
+    DeliveryAddressModel deliveryAddressModel;
+    var result = await FirebaseFirestore.instance
+        .collection("AddDeliverAddress")
+        .doc(id_add)
+        .get();
+
+    if (result.exists) {
+      deliveryAddressModel = DeliveryAddressModel(
+          address_id: result.get("address_id"),
+          fullname: result.get("fullname"),
+          phone: result.get("phone"),
+          street: result.get("street"),
+          ward: result.get("ward"),
+          district: result.get("district"),
+          city: result.get("city"),
+          addressType: result.get("addressType"));
+      selectedAddress = deliveryAddressModel;
+    }
+  }
+
+  DeliveryAddressModel get getSelectedAddress {
+    return selectedAddress!;
+  }
+
+//  UserModel? currentData;
+
+//   void getUserData() async {
+//     UserModel userModel;
+//     var value = await FirebaseFirestore.instance
+//         .collection("usersData")
+//         .doc(FirebaseAuth.instance.currentUser!.uid)
+//         .get();
+//     if (value.exists) {
+//       userModel = UserModel(
+//         userEmail: value.get("userEmail"),
+//         userImage: value.get('userImage'),
+//         userName: value.get("userName"),
+//         userUid: value.get("userUid"),
+//       );
+//       currentData = userModel;
+//       // notifyListeners();
+//     }
+//   }
+
+//   UserModel get currentUserData {
+//     return currentData!;
+//   }
 }

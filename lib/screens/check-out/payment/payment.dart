@@ -46,10 +46,11 @@ class _PaymentState extends State<Payment> {
     CheckoutProvider deliveryAddressProvider = Provider.of(context);
     deliveryAddressProvider.getDeliveryAddressData();
     ReviewCartProvider reviewCartProvider = Provider.of(context);
+    var selectedAddress = deliveryAddressProvider.getSelectedAddress;
     reviewCartProvider.getReviewCartData();
     return Scaffold(
       backgroundColor:
-          loading == true ? Color.fromARGB(255, 206, 206, 206) : null,
+          loading == true ? Color.fromARGB(255, 255, 255, 255) : null,
       appBar: AppBar(
         title: Text('Chi tiết đặt hàng'),
         backgroundColor: primaryColor,
@@ -59,7 +60,6 @@ class _PaymentState extends State<Payment> {
           ? null
           : Container(
               height: 60,
-              // padding: EdgeInsets.all(20),
               padding: EdgeInsets.only(top: 0, right: 10, left: 10, bottom: 10),
               child: MaterialButton(
                 onPressed: () async => {
@@ -100,7 +100,11 @@ class _PaymentState extends State<Payment> {
                       })
                     }
                   else
-                    {}
+                    {
+                      // Fluttertoast.showToast(
+                      //     msg: "Vui lòng chọn địa chỉ nhận hàng của bạn !",
+                      //     backgroundColor: Color.fromARGB(255, 155, 3, 0))
+                    }
                 },
                 child: Text(
                   'Hoàn tất đặt hàng',
@@ -118,72 +122,72 @@ class _PaymentState extends State<Payment> {
       body: loading == true
           ? Center(
               child: CircularProgressIndicator(
-                color: primaryColor,
-                backgroundColor: Colors.amber,
-                strokeWidth: 5.0,
+                backgroundColor: Colors.green[100],
+                valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+                strokeWidth: 4.0,
               ),
             )
           : SingleChildScrollView(
               child: Column(
                 children: [
                   Column(
-                    children: deliveryAddressProvider!.getDeliveryAddressList
-                        .map(
-                          (e) => ListTile(
-                            title: Text(
-                              'Thông tin nhận hàng',
+                    children: [
+                      SizedBox(height: 10),
+                      ListTile(
+                        title: Text(
+                          'Thông tin nhận hàng',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w500),
+                        ),
+                        subtitle: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "Người nhận : ${selectedAddress.fullname}",
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w500),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
                             ),
-                            subtitle: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "Người nhận : ${e.fullname}",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Địa chỉ : ${e.street} , Phường ${e.ward} , Quận ${e.district} , ${e.city}',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Số điện thoại : ${e.phone}',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "${e.addressType}",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black),
-                                )
-                              ],
+                            SizedBox(
+                              height: 10,
                             ),
-                          ),
-                        )
-                        .toList(),
+                            Text(
+                              'Địa chỉ : ${selectedAddress.street} , Phường ${selectedAddress.ward} , Quận ${selectedAddress.district} , ${selectedAddress.city}',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Số điện thoại : ${selectedAddress.phone}',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "Nơi nhận cụ thể : ${selectedAddress.addressType}",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                    ],
                   ),
                   ExpansionTile(
                       title: Text(

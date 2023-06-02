@@ -13,7 +13,7 @@ class ListOrder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     listOrderProvider = Provider.of<ListOrderProvider>(context);
-    listOrderProvider?.getListOrderData();
+    listOrderProvider!.getListOrderData();
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 233, 233, 233),
       appBar: AppBar(

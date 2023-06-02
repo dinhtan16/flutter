@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodorder_app/auth/SignIn.dart';
+import 'package:foodorder_app/providers/user_provider.dart';
 import 'package:foodorder_app/screens/home/DrawerSide.dart';
+import 'package:provider/provider.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -38,6 +40,9 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of(context);
+    var currentUser = userProvider.currentData;
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(2, 134, 17, 1),
       appBar: AppBar(
@@ -83,14 +88,14 @@ class Profile extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Hahahaha',
+                                      currentUser!.userName.toString(),
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
-                                      "username@gmail.com",
+                                      currentUser.userEmail.toString(),
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w300),
@@ -98,19 +103,6 @@ class Profile extends StatelessWidget {
                                     )
                                   ],
                                 ),
-                                CircleAvatar(
-                                  radius: 18,
-                                  backgroundColor:
-                                      Color.fromRGBO(2, 134, 17, 1),
-                                  child: (CircleAvatar(
-                                    radius: 15,
-                                    child: Icon(
-                                      Icons.edit,
-                                      color: Color.fromRGBO(2, 134, 17, 1),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                  )),
-                                )
                               ],
                             ),
                           )
@@ -145,18 +137,33 @@ class Profile extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 0, left: 30),
+            padding: const EdgeInsets.only(top: 0, left: 2),
             child: CircleAvatar(
               radius: 70,
               backgroundColor: Color.fromRGBO(2, 134, 17, 1),
               child: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://lh3.googleusercontent.com/a/AGNmyxZnB5KuTGs45rEoRVEpvRTKPePR-FEZbfxuhleG=s192-c-rg-br100'),
+                backgroundImage: NetworkImage(currentUser.userImage.toString()),
                 radius: 70,
                 backgroundColor: Colors.black,
               ),
             ),
-          )
+          ),
+          Positioned(
+            right: 10,
+            top: 70,
+            child: CircleAvatar(
+              radius: 18,
+              backgroundColor: Color.fromRGBO(2, 134, 17, 1),
+              child: (CircleAvatar(
+                radius: 15,
+                child: Icon(
+                  Icons.edit,
+                  color: Color.fromRGBO(2, 134, 17, 1),
+                ),
+                backgroundColor: Colors.white,
+              )),
+            ),
+          ),
         ],
       ),
     );

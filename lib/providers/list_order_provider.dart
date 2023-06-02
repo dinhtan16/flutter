@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foodorder_app/models/order_model.dart';
+import 'package:foodorder_app/screens/notificate/NotificationService.dart';
 
 class ListOrderProvider with ChangeNotifier {
   OrderModel? orderModel;
@@ -51,6 +52,10 @@ class ListOrderProvider with ChangeNotifier {
           .doc(orderId)
           .update({"is_delivery": false});
       notifyListeners();
+      Future.delayed(Duration(seconds: 10), () {
+        NotificationServices().sendNotification(
+            "Bạn vừa hủy một đơn hàng !", "#${orderId}", "payload");
+      });
     } catch (e) {
       print("cancel order failed : ${e}");
     }

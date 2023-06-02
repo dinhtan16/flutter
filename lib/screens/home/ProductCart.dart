@@ -55,7 +55,7 @@ class _ProductCartState extends State<ProductCart> {
       child: Row(children: [
         Container(
           margin: EdgeInsets.symmetric(horizontal: 5),
-          height: 270,
+          height: 280,
           width: 160,
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(15)),
@@ -69,23 +69,25 @@ class _ProductCartState extends State<ProductCart> {
                       height: 120,
                       padding: EdgeInsets.all(0),
                       width: double.infinity,
-                      child: Image.network(widget.productImage!))),
+                      child: Image.network(
+                        widget.productImage!,
+                        fit: BoxFit.contain,
+                      ))),
               Expanded(
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: 10),
+                    margin: EdgeInsets.only(left: 10, top: 10),
                     child: Text(
                       widget.productName!,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
+                      // textAlign: TextAlign.center,
                     ),
                   ),
-                  // Text(
-                  //   '10k/4 bánh',
-                  //   style: TextStyle(fontSize: 13),
-                  // ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10, left: 10),
                     child: Text(

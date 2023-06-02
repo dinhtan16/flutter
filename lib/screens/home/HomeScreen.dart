@@ -16,7 +16,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ProductProvider? productProvider;
-
   Widget _buildFastProduct(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
